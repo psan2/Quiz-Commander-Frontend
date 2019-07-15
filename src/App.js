@@ -2,7 +2,9 @@ import React from "react";
 import "./App.css";
 import api from "./constants/api";
 import HostLoginComponent from "./components/HostLoginComponent";
-import TeamLoginComponent from "./team_components/TeamLoginComponent";
+import Header from "./components/Header";
+import TeamLoginComponent from "./components/TeamLoginComponent";
+import { Route, BrowserRouter as Router } from "react-router-dom";
 
 class App extends React.Component {
   state = {
@@ -14,10 +16,12 @@ class App extends React.Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
+    const persona = localStorage.getItem("persona");
+
     if (token) {
-      api.getCurrentUser(token, this.state.persona).then(user => {
+      api.getCurrentUser(token, persona).then(user => {
         this.setState({
-          logged_in: this.state.persona,
+          logged_in: persona,
           username: user.username
         });
       });
@@ -40,6 +44,7 @@ class App extends React.Component {
           this.setState({ username: "", password: "" });
         } else {
           localStorage.setItem("token", data.jwt);
+          localStorage.setItem("persona", this.state.persona);
           this.setState({
             logged_in: this.state.persona,
             username: data.username
@@ -50,6 +55,7 @@ class App extends React.Component {
 
   handleLogOut = () => {
     localStorage.clear("token");
+    localStorage.clear("persona");
     this.setState({
       logged_in: "",
       username: "",
@@ -83,10 +89,9 @@ class App extends React.Component {
     }
   };
 
-  render() {
+  Login = () => {
     return (
-      <div className="App">
-        <h1>Quiz Commander</h1>
+      <div>
         Log in as a:
         <select onChange={this.handleChange} name="persona" id="persona">
           <option value="" />
@@ -95,6 +100,49 @@ class App extends React.Component {
         </select>
         {this.personaSelection()}
       </div>
+    );
+  };
+
+  Home = () => {
+    switch (this.state.logged_in) {
+      case "host":
+        return (
+          <HostLoginComponent
+            logged_in={this.state.logged_in}
+            onLoginClicked={this.onLoginClicked}
+            handleLogOut={this.handleLogOut}
+            host_username={this.state.username}
+            handleChange={this.handleChange}
+            password={this.state.password}
+          />
+        );
+
+      case "team":
+        return (
+          <TeamLoginComponent
+            logged_in={this.state.logged_in}
+            onLoginClicked={this.onLoginClicked}
+            handleLogOut={this.handleLogOut}
+            host_username={this.state.username}
+            handleChange={this.handleChange}
+            password={this.state.password}
+          />
+        );
+
+      default:
+        return this.Login();
+    }
+  };
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <Header />
+
+          <Route exact path="/" component={this.Home} />
+        </div>
+      </Router>
     );
   }
 }

@@ -17,7 +17,7 @@ const login = (username, password, persona) => {
 
 const getCurrentUser = (token, persona) => {
   return fetch(`${API_BASE_URL}/${persona}/show`, {
-    headers: { ...HEADERS, Authorization: token }
+    headers: { ...HEADERS, Authorization: token, Persona: persona }
   }).then(res => res.json());
 };
 
