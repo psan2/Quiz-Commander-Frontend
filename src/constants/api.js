@@ -8,7 +8,7 @@ const HEADERS = {
 const API_BASE_URL = `http://localhost:3000`;
 
 const login = (username, password, persona) => {
-  return fetch(`${API_BASE_URL}/${persona}/create`, {
+  return fetch(`${API_BASE_URL}/${persona}s/login`, {
     method: "POST",
     headers: HEADERS,
     body: JSON.stringify({ username, password })
