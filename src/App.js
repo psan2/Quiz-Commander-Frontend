@@ -14,15 +14,12 @@ class App extends React.Component {
     logged_in: false,
     questions: [],
     rounds: [],
-    quizzes: [],
-    current_content_item: {}
+    quizzes: []
   };
 
   componentDidMount() {
     if (api.token()) {
-      api.getContent("questions").then(data => {
-        this.setState({ questions: data });
-      });
+      api.getContent("questions").then(this.parseQuestionsSerial);
       api.getContent("rounds").then(data => {
         this.setState({ rounds: data });
       });
@@ -31,6 +28,61 @@ class App extends React.Component {
       });
     }
   }
+
+  parseQuestionsSerial = data => {
+    let questions = [];
+    data.data.forEach(question => {
+      let questionObj = { id: question.id, ...question.attributes };
+      const answers = data.included
+        .filter(
+          answer => answer.attributes.question_id === parseInt(question.id, 10)
+        )
+        .map(answer => {
+          return {
+            question_id: answer.attributes.question_id,
+            answer_content: answer.attributes.answer_content,
+            correct_answer: answer.attributes.correct_answer
+          };
+        });
+      questionObj = { ...questionObj, answers: answers };
+      questions.push(questionObj);
+    });
+    this.setState({ questions: questions });
+  };
+
+  // TODO - hook up the Rounds controller with RoundQuestions and have an array of question IDs to show what questions are in what round
+  // parseRoundsSerial = data => {
+  //   let rounds = [];
+  //   data.data.forEach(round => {
+  //     let roundObj = round;
+  //     const questions = data.included
+  //       .filter(
+  //         answer => answer.attributes.question_id === parseInt(question.id, 10)
+  //       )
+  //       .map(answer => {
+  //         return {
+  //           question_id: answer.attributes.question_id,
+  //           answer_content: answer.attributes.answer_content,
+  //           correct_answer: answer.attributes.correct_answer
+  //         };
+  //       });
+  //     questionObj = { ...questionObj, answers: answers };
+  //     questions.push(questionObj);
+  //   });
+  //   this.setState({ questions: questions });
+  // };
+
+  handleQuestionChange = (e, id) => {
+    const questions = this.state.questions.map(question => {
+      if (id === question.id) {
+        question[e.target.name] = e.target.value;
+        return question;
+      } else {
+        return question;
+      }
+    });
+    this.setState = { questions: questions };
+  };
 
   handleLogin = () => {
     this.setState({ logged_in: true });
@@ -56,17 +108,23 @@ class App extends React.Component {
   renderContentItem = (match, content_type) => {
     switch (content_type) {
       case "questions":
-        debugger;
         const question = this.state.questions.find(
           question => question.id == match.params.id
         );
-        return <EditQuestion content_type="questions" question={question} />;
+        return (
+          <EditQuestion
+            content_type="questions"
+            question={this.state.question}
+            onItemChange={this.handleContentItemChange}
+          />
+        );
       case "rounds":
         return (
           //edit to reflect round edit
           <EditQuestion
             content_type="rounds"
-            round={this.state.current_content_item}
+            question={question}
+            onItemChange={this.handleContentItemChange}
           />
         );
       case "quizzes":
@@ -74,7 +132,8 @@ class App extends React.Component {
           //edit to reflect quiz edit
           <EditQuestion
             content_type="quizzes"
-            quiz={this.state.current_content_item}
+            question={question}
+            onItemChange={this.handleContentItemChange}
           />
         );
       default:
