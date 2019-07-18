@@ -6,7 +6,9 @@ const HEADERS = {
 };
 
 const API_BASE_URL = `http://localhost:3000`;
-
+const token = () => {
+  return localStorage.getItem("token");
+};
 const login = (username, password, persona) => {
   return fetch(`${API_BASE_URL}/${persona}/login`, {
     method: "POST",
@@ -15,16 +17,15 @@ const login = (username, password, persona) => {
   }).then(res => res.json());
 };
 
-const getCurrentUser = (token, persona) => {
+const getCurrentUser = persona => {
   return fetch(`${API_BASE_URL}/${persona}/show`, {
-    headers: { ...HEADERS, Authorization: token, Persona: persona }
+    headers: { ...HEADERS, Authorization: token(), Persona: persona }
   }).then(res => res.json());
 };
 
-const getContent = (token, content_type) => {
-  debugger;
+const getContent = content_type => {
   return fetch(`${API_BASE_URL}/${content_type}`, {
-    headers: { ...HEADERS, Authorization: token }
+    headers: { ...HEADERS, Authorization: token() }
   }).then(res => res.json());
 };
 
@@ -34,5 +35,6 @@ export default {
   getContent,
   API_ROOT,
   API_WS_ROOT,
-  HEADERS
+  HEADERS,
+  token
 };
