@@ -1,64 +1,92 @@
 import React, { Component } from "react";
+import api from "../../API/Connection";
 
-export default class NewContentItem extends Component {
+export default class EditQuestion extends Component {
+  state = { question: this.props.question };
+
+  submitQuestion = () => {
+    if (this.state.question.id) {
+      api.updateQuestion(this.state.question);
+    } else {
+      api.createQuestion(this.state.question);
+    }
+  };
+
   fileUpload = () => {
-    const type = this.props.question ? this.props.question.question_type : "";
+    const type = this.state.question ? this.state.question.question_type : "";
     if (type === "video" || type === "audio") {
       return <div>"FILE UPLOAD HERE"</div>;
     }
   };
 
   addNewAnswer = () => {
-    const answers = this.props.question.answers;
-    answers.push({ answer_content: "" });
+    const answers = this.state.question.answers;
+    answers.push({
+      answer_content: "",
+      question_id: this.state.question.id,
+      correct_answer: false
+    });
     this.setState({
-      answers: answers
+      question: {
+        answers: answers
+      }
     });
   };
 
   removeNewAnswer = () => {
+    const newAnswers = this.state.question.answers;
+    newAnswers.pop();
     this.setState({
-      answers: this.props.question.answers.slice(
-        this.props.question.answers.length - 1
-      )
+      question: {
+        answers: newAnswers
+      }
     });
   };
 
-  handleAnswerChange = e => {
+  handleAnswerChange = (e, index) => {
     let answers;
+    answers = this.state.question.answers;
+    answers[index][e.target.name] = e.target.value;
+    this.setState({ question: { answers: answers } });
+  };
 
-    if (this.props.question) {
-      answers = this.props.question.answers.map(answer => {
-        if (answer.id === e.target.id) {
-          answer = { ...answer, [e.target.name]: e.target.value };
-          return answer;
-        } else {
-          return answer;
-        }
-      });
-      this.setState({ question: { answers: answers } });
-    }
+  handleQuestionChange = e => {
+    this.setState({
+      question: { ...this.state.question, [e.target.name]: e.target.value }
+    });
   };
 
   generateAnswerOptions = () => {
     let temp = [];
-    const count = this.props.question ? this.props.question.answers.length : 1;
+    const count = this.state.question ? this.state.question.answers.length : 1;
     for (let i = 0; i < count; i++) {
       temp.push(
         <div key={i}>
-          <h4>Answer Options:</h4>
           {i + 1 + ")  "}
           <input
             id={i}
             type="text"
-            name="answer"
+            name="answer_content"
             value={
-              this.props.question && this.props.question.answers[i]
-                ? this.props.question.answers[i].answer_content
+              this.state.question && this.state.question.answers[i]
+                ? this.state.question.answers[i].answer_content
                 : ""
             }
-            onChange={this.handleAnswerChange}
+            onChange={e => this.handleAnswerChange(e, i)}
           />
+          <button
+            name="correct_answer"
+            value={
+              this.state.question.answers[i].correct_answer === "true"
+                ? "false"
+                : "true"
+            }
+            onClick={e => this.handleAnswerChange(e, i)}
+          >
+            {this.state.question.answers[i].correct_answer === "true"
+              ? "✓"
+              : "X"}
+          </button>
           <button onClick={this.removeNewAnswer}>-</button>
         </div>
       );
@@ -67,12 +95,9 @@ export default class NewContentItem extends Component {
   };
 
   render() {
-    debugger;
-    const question = this.props.question ? this.props.question : {};
-
     return (
       <div>
-        <form>
+        <form onSubmit={e => e.preventDefault()}>
           <div>
             <h4>Question Type</h4>
           </div>
@@ -84,7 +109,9 @@ export default class NewContentItem extends Component {
               type="radio"
               name="question_type"
               value="audio"
-              checked={question.question_type === "audio" ? true : false}
+              checked={
+                this.state.question.question_type === "audio" ? true : false
+              }
             />
           </div>
           <div>
@@ -95,7 +122,9 @@ export default class NewContentItem extends Component {
               type="radio"
               name="question_type"
               value="video"
-              checked={question.question_type === "video" ? true : false}
+              checked={
+                this.state.question.question_type === "video" ? true : false
+              }
             />
           </div>
           <div>
@@ -106,7 +135,9 @@ export default class NewContentItem extends Component {
               type="radio"
               name="question_type"
               value="text"
-              checked={question.question_type === "text" ? true : false}
+              checked={
+                this.state.question.question_type === "text" ? true : false
+              }
             />
           </div>
           <div>
@@ -117,7 +148,9 @@ export default class NewContentItem extends Component {
               type="radio"
               name="question_type"
               value="multiple"
-              checked={question.question_type === "multiple" ? true : false}
+              checked={
+                this.state.question.question_type === "multiple" ? true : false
+              }
             />
           </div>
           <div>{this.fileUpload()}</div>
@@ -128,7 +161,7 @@ export default class NewContentItem extends Component {
               id="nickname"
               type="input"
               name="nickname"
-              value={question.nickname}
+              value={this.state.question.nickname}
             />
           </div>
           <div>
@@ -138,10 +171,11 @@ export default class NewContentItem extends Component {
               id="question_content"
               type="input"
               name="question_content"
-              value={question.question_content}
+              value={this.state.question.question_content}
             />
           </div>
           <div>
+            <h4>Answer Options:</h4>
             {this.generateAnswerOptions()}
             <button onClick={this.addNewAnswer}>+</button>
           </div>

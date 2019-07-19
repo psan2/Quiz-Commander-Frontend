@@ -29,6 +29,22 @@ const getContent = content_type => {
   }).then(res => res.json());
 };
 
+const updateQuestion = question => {
+  return fetch(`${API_BASE_URL}/questions/${question.id}`, {
+    method: "PATCH",
+    headers: { ...HEADERS, Authorization: token() },
+    body: JSON.stringify({ question: { ...question } })
+  }).then(res => res.json());
+};
+
+const createQuestion = question => {
+  return fetch(`${API_BASE_URL}/questions/`, {
+    method: "POST",
+    headers: { ...HEADERS, Authorization: token() },
+    body: JSON.stringify({ question: { ...question } })
+  }).then(res => res.json());
+};
+
 export default {
   login,
   getCurrentUser,
@@ -36,5 +52,7 @@ export default {
   API_ROOT,
   API_WS_ROOT,
   HEADERS,
-  token
+  token,
+  updateQuestion,
+  createQuestion
 };

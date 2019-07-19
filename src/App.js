@@ -20,25 +20,29 @@ class App extends React.Component {
   componentDidMount() {
     if (api.token()) {
       api.getContent("questions").then(this.parseQuestionsSerial);
-      api.getContent("rounds").then(data => {
-        this.setState({ rounds: data });
-      });
-      api.getContent("quizzes").then(data => {
-        this.setState({ quizzes: data });
-      });
+      // api.getContent("rounds").then(data => {
+      //   this.setState({ rounds: data });
+      // });
+      // api.getContent("quizzes").then(data => {
+      //   this.setState({ quizzes: data });
+      // });
     }
   }
 
   parseQuestionsSerial = data => {
     let questions = [];
     data.data.forEach(question => {
-      let questionObj = { id: question.id, ...question.attributes };
+      let questionObj = {
+        id: question.id,
+        ...question.attributes
+      };
       const answers = data.included
         .filter(
           answer => answer.attributes.question_id === parseInt(question.id, 10)
         )
         .map(answer => {
           return {
+            id: answer.id,
             question_id: answer.attributes.question_id,
             answer_content: answer.attributes.answer_content,
             correct_answer: answer.attributes.correct_answer
@@ -72,18 +76,6 @@ class App extends React.Component {
   //   this.setState({ questions: questions });
   // };
 
-  handleQuestionChange = (e, id) => {
-    const questions = this.state.questions.map(question => {
-      if (id === question.id) {
-        question[e.target.name] = e.target.value;
-        return question;
-      } else {
-        return question;
-      }
-    });
-    this.setState = { questions: questions };
-  };
-
   handleLogin = () => {
     this.setState({ logged_in: true });
   };
@@ -108,33 +100,32 @@ class App extends React.Component {
   renderContentItem = (match, content_type) => {
     switch (content_type) {
       case "questions":
-        const question = this.state.questions.find(
-          question => question.id == match.params.id
-        );
-        return (
-          <EditQuestion
-            content_type="questions"
-            question={this.state.question}
-            onItemChange={this.handleContentItemChange}
-          />
-        );
+        let question;
+        if (match) {
+          question = this.state.questions.find(
+            question => question.id === match.params.id
+          );
+        } else {
+          question = {
+            answers: [
+              { answer_content: "", correct_answer: false, question_id: 0 }
+            ],
+            aux_content_url: null,
+            nickname: "",
+            question_content: "",
+            question_type: ""
+          };
+        }
+        return <EditQuestion content_type="questions" question={question} />;
       case "rounds":
         return (
           //edit to reflect round edit
-          <EditQuestion
-            content_type="rounds"
-            question={question}
-            onItemChange={this.handleContentItemChange}
-          />
+          <EditQuestion content_type="rounds" question={question} />
         );
       case "quizzes":
         return (
           //edit to reflect quiz edit
-          <EditQuestion
-            content_type="quizzes"
-            question={question}
-            onItemChange={this.handleContentItemChange}
-          />
+          <EditQuestion content_type="quizzes" question={question} />
         );
       default:
         break;
@@ -172,7 +163,7 @@ class App extends React.Component {
         <Route
           exact
           path="/edit-question"
-          render={() => this.renderContentItem("questions")}
+          render={() => this.renderContentItem(null, "questions")}
         />
         <Route
           path="/edit-question/:id"
