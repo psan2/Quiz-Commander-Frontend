@@ -6,9 +6,15 @@ export default class EditQuestion extends Component {
 
   submitQuestion = () => {
     if (this.state.question.id) {
-      api.updateQuestion(this.state.question);
+      api.updateQuestion(this.state.question).then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert("Question updated!");
+        }
+      });
     } else {
-      api.createQuestion(this.state.question);
+      api.createQuestion(this.state.question).then(console.log);
     }
   };
 
@@ -27,9 +33,7 @@ export default class EditQuestion extends Component {
       correct_answer: false
     });
     this.setState({
-      question: {
-        answers: answers
-      }
+      question: { ...this.state.question, answers: answers }
     });
   };
 
@@ -37,9 +41,7 @@ export default class EditQuestion extends Component {
     const newAnswers = this.state.question.answers;
     newAnswers.pop();
     this.setState({
-      question: {
-        answers: newAnswers
-      }
+      question: { ...this.state.question, answers: newAnswers }
     });
   };
 
@@ -47,7 +49,7 @@ export default class EditQuestion extends Component {
     let answers;
     answers = this.state.question.answers;
     answers[index][e.target.name] = e.target.value;
-    this.setState({ question: { answers: answers } });
+    this.setState({ question: { ...this.state.question, answers: answers } });
   };
 
   handleQuestionChange = e => {

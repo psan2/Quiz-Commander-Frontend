@@ -27,7 +27,7 @@ export default class StartPage extends Component {
       .login(this.state.username, this.state.password, this.state.persona)
       .then(data => {
         if (data.error) {
-          alert("something is wrong with your credentials");
+          alert("Please re-enter your username and password and try again.");
           this.setState({ username: "", password: "" });
         } else {
           localStorage.setItem("token", data.jwt);
@@ -43,7 +43,7 @@ export default class StartPage extends Component {
       .login(this.state.username, this.state.password, this.state.persona)
       .then(data => {
         if (data.error) {
-          alert("something is wrong with your credentials");
+          alert(data.error);
           this.setState({ username: "", password: "" });
         } else {
           localStorage.setItem("token", data.jwt);

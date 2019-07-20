@@ -42,8 +42,6 @@ class App extends React.Component {
         )
         .map(answer => {
           return {
-            id: answer.id,
-            question_id: answer.attributes.question_id,
             answer_content: answer.attributes.answer_content,
             correct_answer: answer.attributes.correct_answer
           };

@@ -9,6 +9,7 @@ export default class Question extends Component {
         <Link to={`/edit-question/${this.props.question.id}`}>
           Edit this question
         </Link>
+        <button onClick={}></button>
       </div>
     );
   }
