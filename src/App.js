@@ -52,27 +52,7 @@ class App extends React.Component {
     this.setState({ questions: questions });
   };
 
-  // TODO - hook up the Rounds controller with RoundQuestions and have an array of question IDs to show what questions are in what round
-  // parseRoundsSerial = data => {
-  //   let rounds = [];
-  //   data.data.forEach(round => {
-  //     let roundObj = round;
-  //     const questions = data.included
-  //       .filter(
-  //         answer => answer.attributes.question_id === parseInt(question.id, 10)
-  //       )
-  //       .map(answer => {
-  //         return {
-  //           question_id: answer.attributes.question_id,
-  //           answer_content: answer.attributes.answer_content,
-  //           correct_answer: answer.attributes.correct_answer
-  //         };
-  //       });
-  //     questionObj = { ...questionObj, answers: answers };
-  //     questions.push(questionObj);
-  //   });
-  //   this.setState({ questions: questions });
-  // };
+  parseRoundsSerial = data => {};
 
   handleLogin = () => {
     this.setState({ logged_in: true });

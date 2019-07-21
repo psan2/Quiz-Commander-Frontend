@@ -18,13 +18,21 @@ export default class IndexContentContainer extends Component {
             return <Question key={question.id} question={question} />;
           });
       case "rounds":
-        return this.props.data.map(round => {
-          return <Round key={round.id} round={round} />;
-        });
+        return this.props.data
+          .sort((a, b) => {
+            return a.updated_at > b.updated_at ? -1 : 0;
+          })
+          .map(round => {
+            return <Round key={round.id} round={round} />;
+          });
       case "quizzes":
-        return this.props.data.map(quiz => {
-          return <Quiz key={quiz.id} quiz={quiz} />;
-        });
+        return this.props.data
+          .sort((a, b) => {
+            return a.updated_at > b.updated_at ? -1 : 0;
+          })
+          .map(quiz => {
+            return <Quiz key={quiz.id} quiz={quiz} />;
+          });
       default:
         break;
     }

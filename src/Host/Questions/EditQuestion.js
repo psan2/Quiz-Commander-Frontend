@@ -58,6 +58,22 @@ export default class EditQuestion extends Component {
     });
   };
 
+  trueFalseValue = correct_answer => {
+    if (correct_answer === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  trueFalseButton = correct_answer => {
+    if (correct_answer === true) {
+      return "✓";
+    } else {
+      return "X";
+    }
+  };
+
   generateAnswerOptions = () => {
     let temp = [];
     const count = this.state.question ? this.state.question.answers.length : 1;
@@ -78,16 +94,14 @@ export default class EditQuestion extends Component {
           />
           <button
             name="correct_answer"
-            value={
-              this.state.question.answers[i].correct_answer === "true"
-                ? "false"
-                : "true"
-            }
+            value={this.trueFalseValue(
+              this.state.question.answers[i].correct_answer
+            )}
             onClick={e => this.handleAnswerChange(e, i)}
           >
-            {this.state.question.answers[i].correct_answer === "true"
-              ? "✓"
-              : "X"}
+            {this.trueFalseButton(
+              this.state.question.answers[i].correct_answer
+            )}
           </button>
           <button onClick={this.removeNewAnswer}>-</button>
         </div>
