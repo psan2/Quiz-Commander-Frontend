@@ -45,6 +45,13 @@ const createQuestion = question => {
   }).then(res => res.json());
 };
 
+const deleteQuestion = question_id => {
+  return fetch(`${API_BASE_URL}/questions/${question_id}`, {
+    method: "DELETE",
+    headers: { ...HEADERS, Authorization: token() }
+  });
+};
+
 export default {
   login,
   getCurrentUser,
@@ -54,5 +61,6 @@ export default {
   HEADERS,
   token,
   updateQuestion,
-  createQuestion
+  createQuestion,
+  deleteQuestion
 };

@@ -6,11 +6,12 @@ const Header = props => {
     <div>
       <h1>Quiz Commander</h1>
       <div>
+        <Link to={`/`}>Home</Link>
         <Link to={`/questions`}>Questions</Link>
         <Link to={`/rounds`}>Rounds</Link>
         <Link to={`/quizzes`}>Quizzes</Link>
+        <Link to={`/logout`}>Log Out</Link>
       </div>
-      <button onClick={props.handleLogOut}>Log Out</button>
     </div>
   );
 };

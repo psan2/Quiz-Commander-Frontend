@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Question from "./Questions/Question";
 import Round from "./Rounds/Round";
 import Quiz from "./Quizzes/Quiz";
@@ -29,7 +30,25 @@ export default class IndexContentContainer extends Component {
     }
   };
 
+  newButtonType = () => {
+    switch (this.content_type) {
+      case "questions":
+        return <Link to="/edit-question">New Question</Link>;
+      case "rounds":
+        return <Link to="/edit-round">New Round</Link>;
+      case "quizzes":
+        return <Link to="/edit-quiz">New Quiz</Link>;
+      default:
+        break;
+    }
+  };
+
   render() {
-    return <div>{this.mapContent()}</div>;
+    return (
+      <div>
+        {this.mapContent()}
+        {this.newButtonType()}
+      </div>
+    );
   }
 }
