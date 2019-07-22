@@ -5,6 +5,19 @@ const HEADERS = {
   Accept: "application/json"
 };
 
+const singular_content_item = content_type => {
+  switch (content_type) {
+    case "questions":
+      return "question";
+    case "rounds":
+      return "rounds";
+    case "quizzes":
+      return "quiz";
+    default:
+      return content_type.slice(0, content_type.length - 1);
+  }
+};
+
 const API_BASE_URL = `http://localhost:3000`;
 const token = () => {
   return localStorage.getItem("token");
@@ -23,29 +36,33 @@ const getCurrentUser = persona => {
   }).then(res => res.json());
 };
 
-const getContent = content_type => {
+const getItems = content_type => {
   return fetch(`${API_BASE_URL}/${content_type}`, {
     headers: { ...HEADERS, Authorization: token() }
   }).then(res => res.json());
 };
 
-const updateQuestion = question => {
-  return fetch(`${API_BASE_URL}/questions/${question.id}`, {
+const updateItem = (content_type, content_item) => {
+  const submission = { [singular_content_item(content_type)]: content_item };
+
+  return fetch(`${API_BASE_URL}/${content_type}/${content_item.id}`, {
     method: "PATCH",
     headers: { ...HEADERS, Authorization: token() },
-    body: JSON.stringify({ question: { ...question } })
+    body: JSON.stringify(submission)
   }).then(res => res.json());
 };
 
-const createQuestion = question => {
-  return fetch(`${API_BASE_URL}/questions/`, {
+const createItem = (content_type, content_item) => {
+  const submission = { [singular_content_item(content_type)]: content_item };
+
+  return fetch(`${API_BASE_URL}/${content_type}/`, {
     method: "POST",
     headers: { ...HEADERS, Authorization: token() },
-    body: JSON.stringify({ question: { ...question } })
+    body: JSON.stringify(submission)
   }).then(res => res.json());
 };
 
-const deleteContent = (content_type, content_id) => {
+const deleteItem = (content_type, content_id) => {
   return fetch(`${API_BASE_URL}/${content_type}/${content_id}`, {
     method: "DELETE",
     headers: { ...HEADERS, Authorization: token() }
@@ -55,12 +72,12 @@ const deleteContent = (content_type, content_id) => {
 export default {
   login,
   getCurrentUser,
-  getContent,
+  getItems,
   API_ROOT,
   API_WS_ROOT,
   HEADERS,
   token,
-  updateQuestion,
-  createQuestion,
-  deleteContent
+  updateItem,
+  createItem,
+  deleteItem
 };

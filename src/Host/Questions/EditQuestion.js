@@ -6,7 +6,7 @@ export default class EditQuestion extends Component {
 
   submitQuestion = () => {
     if (this.state.question.id) {
-      api.updateQuestion(this.state.question).then(data => {
+      api.updateItem("questions", this.state.question).then(data => {
         if (data.error) {
           alert(data.error);
         } else {
@@ -14,7 +14,7 @@ export default class EditQuestion extends Component {
         }
       });
     } else {
-      api.createQuestion(this.state.question).then(console.log);
+      api.createItem("questions", this.state.question).then(console.log);
     }
   };
 

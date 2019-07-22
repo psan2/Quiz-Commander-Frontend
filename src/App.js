@@ -7,6 +7,7 @@ import TeamLandingComponent from "./Team/Landing";
 import IndexContentContainer from "./Host/IndexContentContainer";
 import StartPage from "./Login/StartPage";
 import EditQuestion from "./Host/Questions/EditQuestion";
+import EditRound from "./Host/Rounds/EditRound";
 import api from "./API/Connection";
 
 class App extends React.Component {
@@ -19,13 +20,11 @@ class App extends React.Component {
 
   componentDidMount() {
     if (api.token()) {
-      api.getContent("questions").then(this.parseQuestionsSerial);
-      // api.getContent("rounds").then(data => {
-      //   this.setState({ rounds: data });
-      // });
-      // api.getContent("quizzes").then(data => {
-      //   this.setState({ quizzes: data });
-      // });
+      api.getItems("questions").then(this.parseQuestionsSerial);
+      api.getItems("rounds").then(this.parseRoundsSerial);
+      api.getItems("quizzes").then(data => {
+        this.setState({ quizzes: data });
+      });
     }
   }
 
@@ -52,7 +51,9 @@ class App extends React.Component {
     this.setState({ questions: questions });
   };
 
-  parseRoundsSerial = data => {};
+  parseRoundsSerial = data => {
+    debugger;
+  };
 
   handleLogin = () => {
     this.setState({ logged_in: true });
@@ -96,9 +97,21 @@ class App extends React.Component {
         }
         return <EditQuestion content_type="questions" question={question} />;
       case "rounds":
+        let round;
+        if (match) {
+          round = this.state.rounds.find(round => round.id === match.params.id);
+        } else {
+          round = {
+            questions: [
+              { question_content: "", question_type: "", nickname: "" }
+            ],
+            nickname: "",
+            round_type: ""
+          };
+        }
         return (
           //edit to reflect round edit
-          <EditQuestion content_type="rounds" question={question} />
+          <EditRound content_type="rounds" round={round} />
         );
       case "quizzes":
         return (
@@ -160,7 +173,7 @@ class App extends React.Component {
         />
         <Route
           path="/edit-round/:id"
-          render={match => this.renderContentArray(match, "rounds")}
+          render={match => this.renderContentItem(match.match, "rounds")}
         />
         <Route
           path="/quizzes"
