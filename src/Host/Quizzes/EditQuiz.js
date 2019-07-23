@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import api from "../../API/Connection";
 
-export default class EditRound extends Component {
-  state = { round: this.props.round, questions: this.props.questions };
+export default class EditQuiz extends Component {
+  state = {
+    quiz: this.props.quiz,
+    rounds: this.props.rounds
+  };
 
-  submitRound = () => {
+  submitQuiz = () => {
     if (this.state.round.id) {
-      api.updateItem("rounds", this.state.round).then(data => {
+      api.updateItem("quizzes", this.state.quiz).then(data => {
         if (data.error) {
           alert(data.error);
         } else {
-          alert("Round updated!");
+          alert("Quiz updated!");
         }
       });
     } else {
@@ -18,28 +21,28 @@ export default class EditRound extends Component {
     }
   };
 
-  handleRoundChange = e => {
+  handleQuizChange = e => {
     this.setState({
       round: { ...this.state.round, [e.target.name]: e.target.value }
     });
   };
 
-  toggleQuestion = e => {
-    const currentQuestions = this.state.round.questions;
-    const checkboxQuestionIndex = currentQuestions.findIndex(question => {
-      return question.id === e.target.id;
+  toggleRound = e => {
+    const currentRounds = this.state.quiz.rounds;
+    const checkboxRoundIndex = currentRounds.findIndex(round => {
+      return round.id === e.target.id;
     });
 
-    if (checkboxQuestionIndex >= 0) {
-      currentQuestions.splice(checkboxQuestionIndex, 1);
+    if (checkboxRoundIndex >= 0) {
+      currentRounds.splice(checkboxRoundIndex, 1);
     } else {
-      const targetQuestion = this.state.questions.find(question => {
-        return question.id === e.target.id;
+      const targetRound = this.state.rounds.find(round => {
+        return round.id === e.target.id;
       });
-      currentQuestions.push(targetQuestion);
+      currentRounds.push(targetRound);
     }
     this.setState({
-      round: { ...this.state.round, questions: currentQuestions }
+      round: { ...this.state.round, rounds: currentRounds }
     });
   };
 
@@ -48,12 +51,12 @@ export default class EditRound extends Component {
       <div>
         <form onSubmit={e => e.preventDefault()}>
           <div>
-            <h4>Round Type</h4>
+            <h4>Quiz Type</h4>
           </div>
           <div>
             <label>Audio</label>
             <input
-              onChange={this.handleRoundChange}
+              onChange={this.handleQuizChange}
               id="round_type"
               type="radio"
               name="round_type"
@@ -64,7 +67,7 @@ export default class EditRound extends Component {
           <div>
             <label>Video</label>
             <input
-              onChange={this.handleRoundChange}
+              onChange={this.handleQuizChange}
               id="round_type"
               type="radio"
               name="round_type"
@@ -75,7 +78,7 @@ export default class EditRound extends Component {
           <div>
             <label>Text</label>
             <input
-              onChange={this.handleRoundChange}
+              onChange={this.handleQuizChange}
               id="round_type"
               type="radio"
               name="round_type"
@@ -86,7 +89,7 @@ export default class EditRound extends Component {
           <div>
             <label>Multiple Choice</label>
             <input
-              onChange={this.handleRoundChange}
+              onChange={this.handleQuizChange}
               id="round_type"
               type="radio"
               name="round_type"
@@ -97,9 +100,9 @@ export default class EditRound extends Component {
             />
           </div>
           <div>
-            <h4>Round Name:</h4>
+            <h4>Quiz Name:</h4>
             <input
-              onChange={this.handleRoundChange}
+              onChange={this.handleQuizChange}
               id="nickname"
               type="input"
               name="nickname"
@@ -107,16 +110,16 @@ export default class EditRound extends Component {
             />
           </div>
           <div>
-            <h4>Questions:</h4>
-            {this.props.generateQuestionEntries(
-              this.props.questions,
-              this.state.round.questions,
+            <h4>Rounds:</h4>
+            {this.props.generateRoundEntries(
+              this.props.rounds,
+              this.state.quiz.rounds,
               true,
-              this.toggleQuestion
+              this.toggleRound
             )}
           </div>
           <div>
-            <button onClick={this.submitRound}>Submit</button>
+            <button onClick={this.submitQuiz}>Submit</button>
           </div>
         </form>
       </div>

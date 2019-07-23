@@ -8,7 +8,11 @@ import IndexContentContainer from "./Host/IndexContentContainer";
 import StartPage from "./Login/StartPage";
 import EditQuestion from "./Host/Questions/EditQuestion";
 import EditRound from "./Host/Rounds/EditRound";
+import EditQuiz from "./Host/Quizzes/EditQuiz";
 import api from "./API/Connection";
+import Question from "./Host/Questions/Question";
+import Round from "./Host/Rounds/Round";
+import Quiz from "./Host/Quizzes/Quiz";
 
 class App extends React.Component {
   state = {
@@ -21,14 +25,13 @@ class App extends React.Component {
   componentDidMount() {
     if (api.token()) {
       api.getItems("questions").then(this.parseQuestionsSerial);
-      api.getItems("rounds").then(this.parseRoundsSerial);
-      api.getItems("quizzes").then(data => {
-        this.setState({ quizzes: data });
-      });
     }
   }
 
   parseQuestionsSerial = data => {
+    if (!data.data) {
+      return;
+    }
     let questions = [];
     data.data.forEach(question => {
       let questionObj = {
@@ -48,11 +51,45 @@ class App extends React.Component {
       questionObj = { ...questionObj, answers: answers };
       questions.push(questionObj);
     });
-    this.setState({ questions: questions });
+    api
+      .getItems("rounds")
+      .then(data => this.parseRoundsSerial(data, questions));
   };
 
-  parseRoundsSerial = data => {
-    debugger;
+  parseRoundsSerial = (data, questions) => {
+    let rounds = [];
+    data.data.forEach(round => {
+      let roundObj = {
+        id: round.id,
+        ...round.attributes,
+        questions: []
+      };
+      round.relationships.questions.data.forEach(question => {
+        roundObj.questions.push(
+          questions.find(questionObj => question.id === questionObj.id)
+        );
+      });
+      rounds.push(roundObj);
+    });
+    api
+      .getItems("quizzes")
+      .then(data => this.parseQuizzesSerial(data, rounds, questions));
+  };
+
+  parseQuizzesSerial = (data, rounds, questions) => {
+    let quizzes = [];
+    data.data.forEach(quiz => {
+      let quizObj = {
+        id: quiz.id,
+        ...quiz.attributes,
+        rounds: []
+      };
+      quiz.relationships.rounds.data.forEach(round => {
+        quizObj.rounds.push(rounds.find(roundObj => round.id === roundObj.id));
+      });
+      quizzes.push(quizObj);
+    });
+    this.setState({ quizzes: quizzes, rounds: rounds, questions: questions });
   };
 
   handleLogin = () => {
@@ -72,6 +109,8 @@ class App extends React.Component {
       <IndexContentContainer
         content_type={content_type}
         data={this.state[content_type]}
+        generateQuestionEntries={this.generateQuestionEntries}
+        generateRoundEntries={this.generateRoundEntries}
       />
     );
   };
@@ -111,16 +150,70 @@ class App extends React.Component {
         }
         return (
           //edit to reflect round edit
-          <EditRound content_type="rounds" round={round} />
+          <EditRound
+            content_type="rounds"
+            round={round}
+            questions={this.state.questions}
+            generateQuestionEntries={this.generateQuestionEntries}
+          />
         );
       case "quizzes":
         return (
           //edit to reflect quiz edit
-          <EditQuestion content_type="quizzes" question={question} />
+          <EditQuiz
+            content_type="quizzes"
+            rounds={this.state.rounds}
+            generateRoundEntries={this.generateRoundEntries}
+          />
         );
       default:
         break;
     }
+  };
+
+  generateQuestionEntries = (
+    all_questions,
+    round_questions,
+    selectable,
+    toggleQuestionFunction
+  ) => {
+    let questions = [];
+    if (round_questions) {
+      const round_question_ids = round_questions.map(question => question.id);
+      questions = all_questions.map(question => {
+        if (round_question_ids.includes(question.id)) {
+          return { ...question, in_round: true };
+        } else {
+          return question;
+        }
+      });
+    } else {
+      questions = all_questions;
+    }
+
+    return questions.map((question, index) => {
+      return (
+        <Question
+          key={index}
+          question={question}
+          selectable={selectable ? true : false}
+          toggleQuestion={toggleQuestionFunction}
+        />
+      );
+    });
+  };
+
+  generateRoundEntries = rounds => {
+    return rounds.map((round, index) => {
+      return (
+        <Round
+          key={index}
+          round={round}
+          questions={round.questions}
+          generateQuestionEntries={this.generateQuestionEntries}
+        />
+      );
+    });
   };
 
   Home = () => {
@@ -169,7 +262,7 @@ class App extends React.Component {
         <Route
           exact
           path="/edit-round"
-          render={() => this.renderContentItem("rounds")}
+          render={() => this.renderContentItem(null, "rounds")}
         />
         <Route
           path="/edit-round/:id"
@@ -184,7 +277,7 @@ class App extends React.Component {
         <Route
           exact
           path="/edit-quiz"
-          render={() => this.renderContentItem("quizzes")}
+          render={() => this.renderContentItem(null, "quizzes")}
         />
         <Route
           path="/edit-quiz/:id"

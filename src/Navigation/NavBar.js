@@ -10,7 +10,13 @@ const Header = props => {
         <Link to={`/questions`}>Questions</Link>
         <Link to={`/rounds`}>Rounds</Link>
         <Link to={`/quizzes`}>Quizzes</Link>
-        <Link to={`/logout`}>Log Out</Link>
+        <button
+          onClick={() => {
+            props.handleLogOut();
+          }}
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );

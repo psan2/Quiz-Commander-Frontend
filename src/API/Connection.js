@@ -22,6 +22,23 @@ const API_BASE_URL = `http://localhost:3000`;
 const token = () => {
   return localStorage.getItem("token");
 };
+
+const signup = (username, password, password_confirmation, email, persona) => {
+  const key = persona.slice(0, persona.length - 1);
+  return fetch(`${API_BASE_URL}/${persona}`, {
+    method: "POST",
+    headers: HEADERS,
+    body: JSON.stringify({
+      [key]: {
+        username: username,
+        password: password,
+        password_confirmation: password_confirmation,
+        email: email
+      }
+    })
+  }).then(res => res.json());
+};
+
 const login = (username, password, persona) => {
   return fetch(`${API_BASE_URL}/${persona}/login`, {
     method: "POST",
@@ -71,6 +88,7 @@ const deleteItem = (content_type, content_id) => {
 
 export default {
   login,
+  signup,
   getCurrentUser,
   getItems,
   API_ROOT,

@@ -8,6 +8,8 @@ export default class StartPage extends Component {
     persona: "hosts",
     username: "",
     password: "",
+    password_confirmation: "",
+    email: "",
     loginSignup: "login"
   };
 
@@ -39,12 +41,25 @@ export default class StartPage extends Component {
 
   onSignupClicked = e => {
     e.preventDefault();
+
     api
-      .login(this.state.username, this.state.password, this.state.persona)
+      .signup(
+        this.state.username,
+        this.state.password,
+        this.state.password_confirmation,
+        this.state.email,
+        this.state.persona
+      )
       .then(data => {
+        debugger;
         if (data.error) {
           alert(data.error);
-          this.setState({ username: "", password: "" });
+          this.setState({
+            username: "",
+            password: "",
+            password_confirmation: "",
+            email: ""
+          });
         } else {
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("persona", this.state.persona);
@@ -68,6 +83,7 @@ export default class StartPage extends Component {
         <Signup
           capitalize={this.capitalize}
           persona={this.state.persona}
+          onSignupClicked={this.onSignupClicked}
           handleChange={this.handleChange}
         />
       );

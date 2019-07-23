@@ -23,7 +23,14 @@ export default class IndexContentContainer extends Component {
             return a.updated_at > b.updated_at ? -1 : 0;
           })
           .map(round => {
-            return <Round key={round.id} round={round} />;
+            return (
+              <Round
+                key={round.id}
+                round={round}
+                questions={round.questions}
+                generateQuestionEntries={this.props.generateQuestionEntries}
+              />
+            );
           });
       case "quizzes":
         return this.props.data
@@ -31,7 +38,15 @@ export default class IndexContentContainer extends Component {
             return a.updated_at > b.updated_at ? -1 : 0;
           })
           .map(quiz => {
-            return <Quiz key={quiz.id} quiz={quiz} />;
+            return (
+              <Quiz
+                key={quiz.id}
+                quiz={quiz}
+                rounds={quiz.rounds}
+                generateQuestionEntries={this.props.generateQuestionEntries}
+                generateRoundEntries={this.props.generateRoundEntries}
+              />
+            );
           });
       default:
         break;

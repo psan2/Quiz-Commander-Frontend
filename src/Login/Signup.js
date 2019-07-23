@@ -28,10 +28,10 @@ export default class Signup extends React.Component {
             <label>Re-enter your password:</label>
             <input
               onChange={this.props.handleChange}
-              id="password_confirm"
-              type="password_confirm"
-              name="password_confirm"
-              value={this.props.password_confirm}
+              id="password_confirmation"
+              type="password"
+              name="password_confirmation"
+              value={this.props.password_confirmation}
             />
           </div>
           <div>
@@ -45,7 +45,7 @@ export default class Signup extends React.Component {
             />
           </div>
           <div>
-            <button onClick={this.props.onLoginClicked}>Sign Up</button>
+            <button onClick={this.props.onSignupClicked}>Sign Up</button>
           </div>
         </form>
       </div>
