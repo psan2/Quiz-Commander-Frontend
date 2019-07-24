@@ -3,12 +3,11 @@ import api from "../../API/Connection";
 
 export default class EditQuiz extends Component {
   state = {
-    quiz: this.props.quiz,
-    rounds: this.props.rounds
+    quiz: this.props.quiz
   };
 
   submitQuiz = () => {
-    if (this.state.round.id) {
+    if (this.state.quiz.id) {
       api.updateItem("quizzes", this.state.quiz).then(data => {
         if (data.error) {
           alert(data.error);
@@ -23,7 +22,7 @@ export default class EditQuiz extends Component {
 
   handleQuizChange = e => {
     this.setState({
-      round: { ...this.state.round, [e.target.name]: e.target.value }
+      quiz: { ...this.state.quiz, [e.target.name]: e.target.value }
     });
   };
 
@@ -36,13 +35,13 @@ export default class EditQuiz extends Component {
     if (checkboxRoundIndex >= 0) {
       currentRounds.splice(checkboxRoundIndex, 1);
     } else {
-      const targetRound = this.state.rounds.find(round => {
+      const targetRound = this.props.rounds.find(round => {
         return round.id === e.target.id;
       });
       currentRounds.push(targetRound);
     }
     this.setState({
-      round: { ...this.state.round, rounds: currentRounds }
+      quiz: { ...this.state.quiz, rounds: currentRounds }
     });
   };
 

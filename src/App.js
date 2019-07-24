@@ -161,7 +161,7 @@ class App extends React.Component {
           quiz = this.state.quizzes.find(quiz => quiz.id === match.params.id);
         } else {
           quiz = {
-            rounds: [{ round_nickname: "", round_type: "", questions: [] }],
+            rounds: [],
             nickname: ""
           };
         }

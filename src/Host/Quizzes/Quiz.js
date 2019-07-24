@@ -12,7 +12,7 @@ export default class Quiz extends Component {
         <button
           onClick={() => {
             if (window.confirm("Are you sure you wish to delete this item?"))
-              api.deleteContent("quizzes", this.props.quiz.id);
+              api.deleteItem("quizzes", this.props.quiz.id);
           }}
         >
           Delete
