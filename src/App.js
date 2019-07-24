@@ -12,7 +12,6 @@ import EditQuiz from "./Host/Quizzes/EditQuiz";
 import api from "./API/Connection";
 import Question from "./Host/Questions/Question";
 import Round from "./Host/Rounds/Round";
-import Quiz from "./Host/Quizzes/Quiz";
 
 class App extends React.Component {
   state = {
@@ -149,7 +148,6 @@ class App extends React.Component {
           };
         }
         return (
-          //edit to reflect round edit
           <EditRound
             content_type="rounds"
             round={round}
@@ -158,9 +156,18 @@ class App extends React.Component {
           />
         );
       case "quizzes":
+        let quiz;
+        if (match) {
+          quiz = this.state.quizzes.find(quiz => quiz.id === match.params.id);
+        } else {
+          quiz = {
+            rounds: [{ round_nickname: "", round_type: "", questions: [] }],
+            nickname: ""
+          };
+        }
         return (
-          //edit to reflect quiz edit
           <EditQuiz
+            quiz={quiz}
             content_type="quizzes"
             rounds={this.state.rounds}
             generateRoundEntries={this.generateRoundEntries}
@@ -203,14 +210,34 @@ class App extends React.Component {
     });
   };
 
-  generateRoundEntries = rounds => {
+  generateRoundEntries = (
+    all_rounds,
+    quiz_rounds,
+    selectable,
+    toggleRoundFunction
+  ) => {
+    let rounds = [];
+    if (quiz_rounds) {
+      const quiz_round_ids = quiz_rounds.map(round => round.id);
+      rounds = all_rounds.map(round => {
+        if (quiz_round_ids.includes(round.id)) {
+          return { ...round, in_quiz: true };
+        } else {
+          return round;
+        }
+      });
+    } else {
+      rounds = all_rounds;
+    }
     return rounds.map((round, index) => {
       return (
         <Round
           key={index}
           round={round}
+          selectable={selectable ? true : false}
           questions={round.questions}
           generateQuestionEntries={this.generateQuestionEntries}
+          toggleRound={toggleRoundFunction}
         />
       );
     });
@@ -251,7 +278,7 @@ class App extends React.Component {
         />
         <Route
           path="/edit-question/:id"
-          render={match => this.renderContentItem(match.match, "questions")}
+          render={({ match }) => this.renderContentItem(match, "questions")}
         />
         <Route
           path="/rounds"
@@ -266,7 +293,7 @@ class App extends React.Component {
         />
         <Route
           path="/edit-round/:id"
-          render={match => this.renderContentItem(match.match, "rounds")}
+          render={({ match }) => this.renderContentItem(match, "rounds")}
         />
         <Route
           path="/quizzes"
@@ -281,7 +308,7 @@ class App extends React.Component {
         />
         <Route
           path="/edit-quiz/:id"
-          render={match => this.renderContentArray(match, "quizzes")}
+          render={({ match }) => this.renderContentItem(match, "quizzes")}
         />
       </Router>
     );

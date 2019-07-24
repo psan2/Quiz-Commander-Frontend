@@ -17,7 +17,7 @@ export default class EditQuiz extends Component {
         }
       });
     } else {
-      api.createItem("rounds", this.state.round).then(console.log);
+      api.createItem("quizzes", this.state.quiz).then(console.log);
     }
   };
 
@@ -51,62 +51,13 @@ export default class EditQuiz extends Component {
       <div>
         <form onSubmit={e => e.preventDefault()}>
           <div>
-            <h4>Quiz Type</h4>
-          </div>
-          <div>
-            <label>Audio</label>
-            <input
-              onChange={this.handleQuizChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="audio"
-              checked={this.state.round.round_type === "audio" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Video</label>
-            <input
-              onChange={this.handleQuizChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="video"
-              checked={this.state.round.round_type === "video" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Text</label>
-            <input
-              onChange={this.handleQuizChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="text"
-              checked={this.state.round.round_type === "text" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Multiple Choice</label>
-            <input
-              onChange={this.handleQuizChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="multiple"
-              checked={
-                this.state.round.round_type === "multiple" ? true : false
-              }
-            />
-          </div>
-          <div>
             <h4>Quiz Name:</h4>
             <input
               onChange={this.handleQuizChange}
               id="nickname"
               type="input"
               name="nickname"
-              value={this.state.round.nickname}
+              value={this.state.quiz.nickname}
             />
           </div>
           <div>
