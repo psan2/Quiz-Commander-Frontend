@@ -1,7 +1,8 @@
 import React from "react";
 import "./App.css";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-import Header from "./Navigation/NavBar";
+import NavBar from "./Navigation/NavBar";
+import Sidebar from "./Navigation/Sidebar";
 import HostLandingComponent from "./Host/HostLanding";
 import TeamLandingComponent from "./Team/Landing";
 import IndexContentContainer from "./Host/IndexContentContainer";
@@ -260,56 +261,60 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Header
+        <Sidebar />
+        <NavBar
+          className="navbar"
           loginState={this.state.logged_in}
           handleLogOut={this.handleLogOut}
         />
-        <Route exact path="/" component={this.Home} />
-        <Route
-          path="/questions"
-          render={() => {
-            return this.renderContentArray("questions");
-          }}
-        />
-        <Route
-          exact
-          path="/edit-question"
-          render={() => this.renderContentItem(null, "questions")}
-        />
-        <Route
-          path="/edit-question/:id"
-          render={({ match }) => this.renderContentItem(match, "questions")}
-        />
-        <Route
-          path="/rounds"
-          render={() => {
-            return this.renderContentArray("rounds");
-          }}
-        />
-        <Route
-          exact
-          path="/edit-round"
-          render={() => this.renderContentItem(null, "rounds")}
-        />
-        <Route
-          path="/edit-round/:id"
-          render={({ match }) => this.renderContentItem(match, "rounds")}
-        />
-        <Route
-          path="/quizzes"
-          render={() => {
-            return this.renderContentArray("quizzes");
-          }}
-        />
-        <Route
-          exact
-          path="/edit-quiz"
-          render={() => this.renderContentItem(null, "quizzes")}
-        />
-        <Route
-          path="/edit-quiz/:id"
-          render={({ match }) => this.renderContentItem(match, "quizzes")}
-        />
+        <div className="main">
+          <Route exact path="/" component={this.Home} />
+          <Route
+            path="/questions"
+            render={() => {
+              return this.renderContentArray("questions");
+            }}
+          />
+          <Route
+            exact
+            path="/edit-question"
+            render={() => this.renderContentItem(null, "questions")}
+          />
+          <Route
+            path="/edit-question/:id"
+            render={({ match }) => this.renderContentItem(match, "questions")}
+          />
+          <Route
+            path="/rounds"
+            render={() => {
+              return this.renderContentArray("rounds");
+            }}
+          />
+          <Route
+            exact
+            path="/edit-round"
+            render={() => this.renderContentItem(null, "rounds")}
+          />
+          <Route
+            path="/edit-round/:id"
+            render={({ match }) => this.renderContentItem(match, "rounds")}
+          />
+          <Route
+            path="/quizzes"
+            render={() => {
+              return this.renderContentArray("quizzes");
+            }}
+          />
+          <Route
+            exact
+            path="/edit-quiz"
+            render={() => this.renderContentItem(null, "quizzes")}
+          />
+          <Route
+            path="/edit-quiz/:id"
+            render={({ match }) => this.renderContentItem(match, "quizzes")}
+          />
+        </div>
       </Router>
     );
   }

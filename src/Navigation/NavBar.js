@@ -1,17 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Header = props => {
+const NavBar = props => {
   return (
-    <div>
-      <NavLink to={`/`}>
-        <img
-          className="logo"
-          src={require("../Assets/quiz-commander-logo.png")}
-          alt="quiz commander logo"
-        />
-      </NavLink>
+    <div className="header">
       <div className="navbar">
+        <NavLink
+          exact
+          className="navbar-button"
+          activeClassName="navbar-button-active"
+          to={`/`}
+        >
+          Hosts
+        </NavLink>
         <NavLink
           className="navbar-button"
           activeClassName="navbar-button-active"
@@ -33,6 +34,12 @@ const Header = props => {
         >
           Quizzes
         </NavLink>
+        <NavLink
+          className="navbar-button"
+          activeClassName="navbar-button-active"
+        >
+          Analytics
+        </NavLink>
       </div>
       <button
         className="logout-button"
@@ -46,4 +53,4 @@ const Header = props => {
   );
 };
 
-export default Header;
+export default NavBar;

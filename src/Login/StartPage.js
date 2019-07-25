@@ -51,7 +51,6 @@ export default class StartPage extends Component {
         this.state.persona
       )
       .then(data => {
-        debugger;
         if (data.error) {
           alert(data.error);
           this.setState({

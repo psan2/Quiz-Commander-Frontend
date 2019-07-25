@@ -4,9 +4,35 @@ body {
   color: white;
 }
 
+.main {
+  width: calc(100vw - 250px);
+  position: relative;
+  left: 200px;
+  top: 70px;
+}
+
+.sidebar {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #050505;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
 .logo {
   padding: 20px;
   height: 150px;
+}
+
+.header {
+  width: calc(100vw - 250px);
+  left: 200px;
+  position: relative;
+  top: 50px;
 }
 
 .navbar {
@@ -35,6 +61,30 @@ body {
   padding-right: 10px;
   text-decoration: none;
   font-size: 2rem;
+}
+
+.host-landing-row {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.host-landing-button {
+  display: inline-block;
+  width: 16vw;
+  height: 45px;
+  background-color: #006ba6;
+  border-radius: 40px;
+  color: #ffbc42;
+  text-decoration: none;
+  font-size: 1.5rem;
+  padding-top: 15px;
+  text-align: center;
+  margin-right: 15px;
+}
+
+.double {
+  width: 33vw;
+  background-color: #d81159;
 }
 
 .logout-button {
