@@ -4,9 +4,21 @@ body {
   color: white;
 }
 
+.main {
+  position: relative;
+  left: 200px;
+  top: 120px;
+}
+
 .logo {
   padding: 20px;
   height: 150px;
+}
+
+.header {
+  left: 200px;
+  position: relative;
+  top: 100px;
 }
 
 .navbar {
@@ -37,6 +49,23 @@ body {
   font-size: 2rem;
 }
 
+.host-landing-button {
+  text-decoration: none;
+  font-size: 2rem;
+}
+
 .logout-button {
   float: right;
+}
+
+.sidebar {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #050505;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
