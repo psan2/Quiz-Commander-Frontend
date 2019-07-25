@@ -1,9 +1,16 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NavBar = props => {
+const Header = props => {
   return (
-    <div className="header">
+    <div>
+      <NavLink to={`/`}>
+        <img
+          className="logo"
+          src={require("../Assets/quiz-commander-logo.png")}
+          alt="quiz commander logo"
+        />
+      </NavLink>
       <div className="navbar">
         <NavLink
           className="navbar-button"
@@ -39,4 +46,4 @@ const NavBar = props => {
   );
 };
 
-export default NavBar;
+export default Header;

@@ -1,24 +1,18 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default class HostLanding extends Component {
   render() {
     return (
       <div>
         <div>
-          <NavLink className="host-landing-button" to="/questions">
-            Questions
-          </NavLink>
+          <Link to="/questions">See your questions</Link>
         </div>
         <div>
-          <NavLink className="host-landing-button" to="/rounds">
-            Rounds
-          </NavLink>
+          <Link to="/rounds">See your rounds</Link>
         </div>
         <div>
-          <NavLink className="host-landing-button" to="/quizzes">
-            Quizzes
-          </NavLink>
+          <Link to="/quizzes">See your quizzes</Link>
         </div>
       </div>
     );
