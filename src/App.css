@@ -30,7 +30,7 @@ body {
 
 .navbar-button {
   color: #d81159;
-  padding-top: 3px;
+  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   text-decoration: none;
@@ -42,7 +42,7 @@ body {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: #d81159;
-  padding-top: 3px;
+  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   text-decoration: none;
