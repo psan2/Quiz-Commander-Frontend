@@ -46,8 +46,10 @@ export default class EditQuestion extends Component {
   };
 
   handleAnswerChange = (e, index) => {
-    let answers;
-    answers = this.state.question.answers;
+    let answers = [];
+    if (this.state.question.answers) {
+      answers = this.state.question.answers;
+    }
     answers[index][e.target.name] = e.target.value;
     this.setState({ question: { ...this.state.question, answers: answers } });
   };
@@ -59,15 +61,15 @@ export default class EditQuestion extends Component {
   };
 
   trueFalseValue = correct_answer => {
-    if (correct_answer === true) {
-      return true;
-    } else {
+    if (correct_answer === "true" || correct_answer === true) {
       return false;
+    } else {
+      return true;
     }
   };
 
   trueFalseButton = correct_answer => {
-    if (correct_answer === true) {
+    if (correct_answer === "true" || correct_answer === true) {
       return "✓";
     } else {
       return "X";
