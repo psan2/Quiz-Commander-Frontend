@@ -41,14 +41,14 @@ const NavBar = props => {
           Analytics
         </NavLink>
       </div>
-      <button
+      <div
         className="logout-button"
         onClick={() => {
           props.handleLogOut();
         }}
       >
-        Log Out
-      </button>
+        Log<br />Out
+      </div>
     </div>
   );
 };

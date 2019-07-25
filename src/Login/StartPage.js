@@ -108,12 +108,60 @@ export default class StartPage extends Component {
 
   render() {
     return (
-      <div>
-        <div onClick={() => this.setState({ loginSignup: "login" })}>Login</div>
-        <div onClick={() => this.setState({ loginSignup: "signup" })}>
-          Signup
+      <div className="login-flex-container">
+        <div className="login-flex-left-column">
+          <img
+            className="login-logo"
+            src={require("../Assets/quiz-commander-logo.png")}
+            alt="quiz commander logo"
+          />
+          <div style={{ textAlign: "center", marginBottom: "25px" }}>
+            <div
+              style={{
+                display: "inline-block",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+                color: "#0496ff",
+                width: "70%"
+              }}
+            >
+              A place for trivia hosts to create innovative, highly interactive
+              quizzes that teams can use their phones to answer!
+            </div>
+          </div>
+          <div>
+            <img
+              className="qc-icon"
+              src={require("../Assets/no_paper_forms.png")}
+              alt="No paper forms required!"
+            />{" "}
+            <img
+              className="qc-icon"
+              src={require("../Assets/precision_scoring.png")}
+              alt="Get scores live!"
+            />{" "}
+            <img
+              className="qc-icon"
+              src={require("../Assets/reuse_questions.png")}
+              alt="Build questions from your personal question bank!"
+            />{" "}
+            <img
+              className="qc-icon"
+              src={require("../Assets/question_types.png")}
+              alt="Use a variety of fun question types!"
+            />
+          </div>
         </div>
-        {this.renderPrompt()}
+        <div className="login-flex-right-column">
+          RIGHT SIDE
+          <div onClick={() => this.setState({ loginSignup: "login" })}>
+            Login
+          </div>
+          <div onClick={() => this.setState({ loginSignup: "signup" })}>
+            Signup
+          </div>
+          {this.renderPrompt()}
+        </div>
       </div>
     );
   }
