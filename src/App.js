@@ -16,7 +16,6 @@ import Round from "./Host/Rounds/Round";
 
 class App extends React.Component {
   state = {
-    logged_in: false,
     questions: [],
     rounds: [],
     quizzes: []
@@ -260,7 +259,7 @@ class App extends React.Component {
   };
 
   render() {
-    if (!this.state.logged_in) {
+    if (!api.token()) {
       return <StartPage handleLogin={this.handleLogin} />;
     } else {
       return (

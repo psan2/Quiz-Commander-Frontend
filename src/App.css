@@ -124,9 +124,25 @@ body {
   flex-basis: auto;
   width: 50vw;
   min-width: 300px;
+  text-align: center;
 }
 
 .qc-icon {
   padding: 1%;
   width: 20%;
+}
+
+.signup-login-container {
+  display: inline-block;
+  background-color: #006ba6;
+  padding: 25px;
+  margin: 25px;
+  border-radius: 25px;
+  width: 50%;
+  height: 60%;
+  color: #ffbc42;
+}
+
+.toggle-button {
+  display: inline-block;
 }

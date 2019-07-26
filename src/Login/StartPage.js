@@ -89,16 +89,34 @@ export default class StartPage extends Component {
     }
   };
 
-  renderPrompt = () => {
+  headerToggle = () => {
     if (this.state.loginSignup) {
       return (
         <div>
           <div>
-            {this.capitalize(this.state.loginSignup)} as:
-            <select onChange={this.handleChange} name="persona" id="persona">
+            <div
+              name="persona"
+              value="hosts"
+              onClick={this.handleChange}
+              className="toggle-button"
+              style={{ float: "left" }}
+            >
+              Hosts
+            </div>
+            <div
+              name="persona"
+              value="hosts"
+              onClick={this.handleChange}
+              className="toggle-button"
+              style={{ float: "right" }}
+            >
+              Teams
+            </div>
+            {/* {this.capitalize(this.state.loginSignup)} as: */}
+            {/* <select onChange={this.handleChange} name="persona" id="persona">
               <option value="hosts">Host</option>
               <option value="teams">Team</option>
-            </select>
+            </select> */}
             {this.renderLoginOrSignupPrompt()}
           </div>
         </div>
@@ -153,14 +171,21 @@ export default class StartPage extends Component {
           </div>
         </div>
         <div className="login-flex-right-column">
-          RIGHT SIDE
-          <div onClick={() => this.setState({ loginSignup: "login" })}>
-            Login
+          <div className="signup-login-container">
+            {this.headerToggle()}
+            <div
+              className="toggle-button"
+              onClick={() => this.setState({ loginSignup: "login" })}
+            >
+              Login
+            </div>
+            <div
+              className="toggle-button"
+              onClick={() => this.setState({ loginSignup: "signup" })}
+            >
+              Signup
+            </div>
           </div>
-          <div onClick={() => this.setState({ loginSignup: "signup" })}>
-            Signup
-          </div>
-          {this.renderPrompt()}
         </div>
       </div>
     );
