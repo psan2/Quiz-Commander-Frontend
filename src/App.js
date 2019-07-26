@@ -1,15 +1,15 @@
 import React from "react";
 import "./App.css";
-import { Route, withRouter, Switch } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import NavBar from "./Navigation/NavBar";
 import Sidebar from "./Navigation/Sidebar";
 import HostLandingComponent from "./Host/HostLanding";
 import TeamLandingComponent from "./Team/Landing";
 import IndexContentContainer from "./Host/IndexContentContainer";
 import StartPage from "./Login/StartPage";
-import EditQuestion from "./Host/Questions/EditQuestion";
-import EditRound from "./Host/Rounds/EditRound";
-import EditQuiz from "./Host/Quizzes/EditQuiz";
+import QuestionEdit from "./Host/Questions/QuestionEdit";
+import RoundEdit from "./Host/Rounds/RoundEdit";
+import QuizEdit from "./Host/Quizzes/QuizEdit";
 import api from "./API/Connection";
 import Question from "./Host/Questions/Question";
 import Round from "./Host/Rounds/Round";
@@ -23,7 +23,6 @@ class App extends React.Component {
 
   componentDidMount() {
     if (api.token()) {
-      api.getItems("questions").then(this.parseQuestionsSerial);
     }
   }
 
@@ -50,12 +49,10 @@ class App extends React.Component {
       questionObj = { ...questionObj, answers: answers };
       questions.push(questionObj);
     });
-    api
-      .getItems("rounds")
-      .then(data => this.parseRoundsSerial(data, questions));
+    return questions;
   };
 
-  parseRoundsSerial = (data, questions) => {
+  parseRoundsSerial = data => {
     let rounds = [];
     data.data.forEach(round => {
       let roundObj = {
@@ -70,12 +67,10 @@ class App extends React.Component {
       });
       rounds.push(roundObj);
     });
-    api
-      .getItems("quizzes")
-      .then(data => this.parseQuizzesSerial(data, rounds, questions));
+    return rounds;
   };
 
-  parseQuizzesSerial = (data, rounds, questions) => {
+  parseQuizzesSerial = data => {
     let quizzes = [];
     data.data.forEach(quiz => {
       let quizObj = {
@@ -88,7 +83,7 @@ class App extends React.Component {
       });
       quizzes.push(quizObj);
     });
-    this.setState({ quizzes: quizzes, rounds: rounds, questions: questions });
+    return quizzes;
   };
 
   handleLogin = () => {
@@ -133,7 +128,7 @@ class App extends React.Component {
             question_type: ""
           };
         }
-        return <EditQuestion content_type="questions" question={question} />;
+        return <QuestionEdit content_type="questions" question={question} />;
       case "rounds":
         let round;
         if (match) {
@@ -148,7 +143,7 @@ class App extends React.Component {
           };
         }
         return (
-          <EditRound
+          <RoundEdit
             content_type="rounds"
             round={round}
             questions={this.state.questions}
@@ -166,7 +161,7 @@ class App extends React.Component {
           };
         }
         return (
-          <EditQuiz
+          <QuizEdit
             quiz={quiz}
             content_type="quizzes"
             rounds={this.state.rounds}
