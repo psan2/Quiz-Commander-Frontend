@@ -9,7 +9,7 @@ export default class HostLanding extends Component {
           <NavLink className="host-landing-button double">Start a Quiz</NavLink>
         </div>
         <div className="host-landing-row">
-          <NavLink className="host-landing-button" to="/edit-quiz">
+          <NavLink className="host-landing-button" to="/quizzes/edit">
             Create a Quiz
           </NavLink>
           <NavLink className="host-landing-button" to="/quizzes">
@@ -17,7 +17,7 @@ export default class HostLanding extends Component {
           </NavLink>
         </div>
         <div className="host-landing-row">
-          <NavLink className="host-landing-button" to="/edit-round">
+          <NavLink className="host-landing-button" to="/rounds/edit">
             Create a Round
           </NavLink>
           <NavLink className="host-landing-button" to="/rounds">
@@ -25,7 +25,7 @@ export default class HostLanding extends Component {
           </NavLink>
         </div>
         <div className="host-landing-row">
-          <NavLink className="host-landing-button" to="/edit-question">
+          <NavLink className="host-landing-button" to="/questions/edit">
             Create a Question
           </NavLink>
           <NavLink className="host-landing-button" to="/questions">

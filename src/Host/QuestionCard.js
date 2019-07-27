@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import api from "../../API/Connection";
+import api from "../API/Connection";
 
 export default class Question extends Component {
   checkboxPresent = () => {

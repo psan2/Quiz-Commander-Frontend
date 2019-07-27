@@ -5,7 +5,12 @@ const HEADERS = {
   Accept: "application/json"
 };
 
-const singular_content_item = content_type => {
+const API_BASE_URL = `http://localhost:3000`;
+const token = () => {
+  return localStorage.getItem("token");
+};
+
+const singularContentItem = content_type => {
   switch (content_type) {
     case "questions":
       return "question";
@@ -16,11 +21,6 @@ const singular_content_item = content_type => {
     default:
       return content_type.slice(0, content_type.length - 1);
   }
-};
-
-const API_BASE_URL = `http://localhost:3000`;
-const token = () => {
-  return localStorage.getItem("token");
 };
 
 const signup = (username, password, password_confirmation, email, persona) => {
@@ -60,7 +60,7 @@ const getItems = content_type => {
 };
 
 const updateItem = (content_type, content_item) => {
-  const submission = { [singular_content_item(content_type)]: content_item };
+  const submission = { [singularContentItem(content_type)]: content_item };
 
   return fetch(`${API_BASE_URL}/${content_type}/${content_item.id}`, {
     method: "PATCH",
@@ -70,7 +70,7 @@ const updateItem = (content_type, content_item) => {
 };
 
 const createItem = (content_type, content_item) => {
-  const submission = { [singular_content_item(content_type)]: content_item };
+  const submission = { [singularContentItem(content_type)]: content_item };
 
   return fetch(`${API_BASE_URL}/${content_type}/`, {
     method: "POST",
