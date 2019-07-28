@@ -146,3 +146,32 @@ body {
 .toggle-button {
   display: inline-block;
 }
+
+.card-container {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 200px;
+  height: 200px;
+  margin: 15px;
+  background-color: #006ba6;
+  padding: 15px;
+  border-radius: 15px;
+  color: #ffbc42;
+  text-align: center;
+}
+
+.card-icon {
+  width: 100px;
+  z-index: 3;
+}
+
+.flip-icon {
+  float: right;
+  z-index: 3;
+  height: 20px;
+  display: block;
+}

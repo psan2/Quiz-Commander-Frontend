@@ -68,7 +68,7 @@ export default class IndexContentContainer extends Component {
 
   render() {
     return (
-      <div>
+      <div className="card-container">
         {this.mapContent()}
         {this.newButtonType()}
       </div>

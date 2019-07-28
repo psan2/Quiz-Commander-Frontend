@@ -35,7 +35,8 @@ class App extends React.Component {
     data.data.forEach(question => {
       let questionObj = {
         id: question.id,
-        ...question.attributes
+        ...question.attributes,
+        flip: false
       };
       const answers = data.included
         .filter(
