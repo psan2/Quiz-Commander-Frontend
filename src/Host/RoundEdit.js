@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import api from "../../API/Connection";
 
-export default class EditRound extends Component {
+export default class RoundEdit extends Component {
   state = { round: this.props.round, questions: this.props.questions };
 
   submitRound = () => {

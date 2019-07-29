@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import api from "../../API/Connection";
 
-export default class EditQuestion extends Component {
+export default class QuestionEdit extends Component {
   state = { question: this.props.question };
 
   submitQuestion = () => {

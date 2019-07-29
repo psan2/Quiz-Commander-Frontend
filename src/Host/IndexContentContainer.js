@@ -1,53 +1,43 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Question from "./Questions/Question";
-import Round from "./Rounds/Round";
-import Quiz from "./Quizzes/Quiz";
+
+//api function imports
+import api from "../API/Connection";
+import deserialize from "../API/Deserializer";
+
+//subcomponent imports
+import QuestionCard from "./QuestionCard";
+import RoundCard from "./RoundCard";
+import QuizCard from "./QuizCard";
 
 export default class IndexContentContainer extends Component {
+  state = {
+    content_items: []
+  };
+
   content_type = this.props.content_type;
 
-  mapContent = () => {
+  componentDidMount = () => {
+    this.fetchContent();
+  };
+
+  fetchContent = () => {
+    api
+      .getItems(this.content_type)
+      .then(this.transformContent)
+      .then(deserialized_content =>
+        this.setState({ content_items: deserialized_content })
+      );
+  };
+
+  transformContent = data => {
     switch (this.content_type) {
       case "questions":
-        return this.props.data
-          .sort((a, b) => {
-            return a.updated_at > b.updated_at ? -1 : 0;
-          })
-          .map(question => {
-            return <Question key={question.id} question={question} />;
-          });
+        return deserialize.questions(data);
       case "rounds":
-        return this.props.data
-          .sort((a, b) => {
-            return a.updated_at > b.updated_at ? -1 : 0;
-          })
-          .map(round => {
-            return (
-              <Round
-                key={round.id}
-                round={round}
-                questions={round.questions}
-                generateQuestionEntries={this.props.generateQuestionEntries}
-              />
-            );
-          });
+        return deserialize.rounds(data);
       case "quizzes":
-        return this.props.data
-          .sort((a, b) => {
-            return a.updated_at > b.updated_at ? -1 : 0;
-          })
-          .map(quiz => {
-            return (
-              <Quiz
-                key={quiz.id}
-                quiz={quiz}
-                rounds={quiz.rounds}
-                generateQuestionEntries={this.props.generateQuestionEntries}
-                generateRoundEntries={this.props.generateRoundEntries}
-              />
-            );
-          });
+        return deserialize.quizzes(data);
       default:
         break;
     }
@@ -56,21 +46,49 @@ export default class IndexContentContainer extends Component {
   newButtonType = () => {
     switch (this.content_type) {
       case "questions":
-        return <Link to="/edit-question">New Question</Link>;
+        return <Link to="/questions/edit">New Question</Link>;
       case "rounds":
-        return <Link to="/edit-round">New Round</Link>;
+        return <Link to="/rounds/edit">New Round</Link>;
       case "quizzes":
-        return <Link to="/edit-quiz">New Quiz</Link>;
+        return <Link to="/quizzes/edit">New Quiz</Link>;
       default:
         break;
     }
   };
 
+  renderContent = () => {
+    if (this.state.content_items.length === 0) {
+      return "THIS WILL SPIN AS LOADING";
+    } else {
+      switch (this.content_type) {
+        case "questions":
+          return this.state.content_items.map(question => (
+            <QuestionCard key={question.id} question={question} />
+          ));
+        case "rounds":
+          return this.state.content_items.map(round => (
+            <RoundCard key={round.id} round={round} />
+          ));
+        case "quizzes":
+          return this.state.content_items.map(quiz => (
+            <QuizCard key={quiz.id} quiz={quiz} />
+          ));
+        default:
+          break;
+      }
+    }
+  };
+
   render() {
     return (
+<<<<<<< HEAD
       <div className="card-container">
         {this.mapContent()}
+=======
+      <div>
+>>>>>>> redux
         {this.newButtonType()}
+        {this.renderContent()}
       </div>
     );
   }
