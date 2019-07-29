@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import FilterBar from "./FilterBar";
 
 //api function imports
 import api from "../API/Connection";
@@ -12,7 +13,8 @@ import QuizCard from "./QuizCard";
 
 export default class IndexContentContainer extends Component {
   state = {
-    content_items: []
+    content_items: [],
+    filter: ""
   };
 
   content_type = this.props.content_type;
@@ -43,34 +45,48 @@ export default class IndexContentContainer extends Component {
     }
   };
 
-  newButtonType = () => {
-    switch (this.content_type) {
-      case "questions":
-        return <Link to="/questions/edit">New Question</Link>;
-      case "rounds":
-        return <Link to="/rounds/edit">New Round</Link>;
-      case "quizzes":
-        return <Link to="/quizzes/edit">New Quiz</Link>;
-      default:
-        break;
+  handleFilter = e => {
+    this.setState({ filter: e.target.id });
+  };
+
+  filterItems = () => {
+    if (this.state.filter) {
+      return this.state.content_items.filter(item => {
+        return (
+          item.question_type === this.state.filter ||
+          item.round_type === this.state.filter
+        );
+      });
+    } else {
+      return this.state.content_items;
+    }
+  };
+
+  contentFilters = () => {
+    if (this.content_type !== "quizzes") {
+      return <FilterBar handleFilter={this.handleFilter} />;
     }
   };
 
   renderContent = () => {
     if (this.state.content_items.length === 0) {
-      return "THIS WILL SPIN AS LOADING";
+      return (
+        <div class="lds-circle">
+          <div />
+        </div>
+      );
     } else {
       switch (this.content_type) {
         case "questions":
-          return this.state.content_items.map(question => (
+          return this.filterItems().map(question => (
             <QuestionCard key={question.id} question={question} />
           ));
         case "rounds":
-          return this.state.content_items.map(round => (
+          return this.filterItems().map(round => (
             <RoundCard key={round.id} round={round} />
           ));
         case "quizzes":
-          return this.state.content_items.map(quiz => (
+          return this.filterItems().map(quiz => (
             <QuizCard key={quiz.id} quiz={quiz} />
           ));
         default:
@@ -81,13 +97,9 @@ export default class IndexContentContainer extends Component {
 
   render() {
     return (
-<<<<<<< HEAD
       <div className="card-container">
-        {this.mapContent()}
-=======
-      <div>
->>>>>>> redux
-        {this.newButtonType()}
+        {this.contentFilters()}
+        <div style={{ flexBasis: "100%" }} />
         {this.renderContent()}
       </div>
     );

@@ -1,0 +1,33 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mini-card-icon {
+  width: 90px;
+  height: 90px;
+  margin: 10px 25px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: #006ba6;
+  color: #ffbc42;
+  display: inline-block;
+  border-radius: 15px;
+  perspective: 1000px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+}
+
+.mini-card-icon:hover {
+  border: 2px solid #ffbc42;
+}
+
+.mini-card-icon-active {
+  background-color: #0496ff;
+}
+
+.new-content-item {
+  background-color: #d81159;
+}
