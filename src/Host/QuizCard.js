@@ -7,7 +7,6 @@ export default class Quiz extends Component {
     return (
       <div>
         <h3>{this.props.quiz.nickname}</h3>
-        {this.props.generateRoundEntries(this.props.rounds)}
         <Link to={`/edit-quiz/${this.props.quiz.id}`}>Edit this quiz</Link>
         <button
           onClick={() => {

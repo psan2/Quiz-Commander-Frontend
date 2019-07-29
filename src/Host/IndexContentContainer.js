@@ -22,17 +22,22 @@ export default class IndexContentContainer extends Component {
   };
 
   fetchContent = () => {
-    api.getItems(this.content_type).then(this.transformContent);
+    api
+      .getItems(this.content_type)
+      .then(this.transformContent)
+      .then(deserialized_content =>
+        this.setState({ content_items: deserialized_content })
+      );
   };
 
   transformContent = data => {
     switch (this.content_type) {
       case "questions":
-        return deserialize.parseQuestionsSerial(data);
+        return deserialize.questions(data);
       case "rounds":
-        return deserialize.parseRoundsSerial(data);
+        return deserialize.rounds(data);
       case "quizzes":
-        return deserialize.parseQuizzesSerial(data);
+        return deserialize.quizzes(data);
       default:
         break;
     }
@@ -51,7 +56,35 @@ export default class IndexContentContainer extends Component {
     }
   };
 
+  renderContent = () => {
+    if (this.state.content_items.length === 0) {
+      return "THIS WILL SPIN AS LOADING";
+    } else {
+      switch (this.content_type) {
+        case "questions":
+          return this.state.content_items.map(question => (
+            <QuestionCard key={question.id} question={question} />
+          ));
+        case "rounds":
+          return this.state.content_items.map(round => (
+            <RoundCard key={round.id} round={round} />
+          ));
+        case "quizzes":
+          return this.state.content_items.map(quiz => (
+            <QuizCard key={quiz.id} quiz={quiz} />
+          ));
+        default:
+          break;
+      }
+    }
+  };
+
   render() {
-    return <div>{this.newButtonType()}</div>;
+    return (
+      <div>
+        {this.newButtonType()}
+        {this.renderContent()}
+      </div>
+    );
   }
 }

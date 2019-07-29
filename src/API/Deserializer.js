@@ -1,4 +1,4 @@
-const parseQuestionsSerial = data => {
+const questions = data => {
   if (!data.data) {
     return;
   }
@@ -24,21 +24,18 @@ const parseQuestionsSerial = data => {
   return questions;
 };
 
-const parseRoundsSerial = ({ data }) => {
-  debugger;
+const rounds = ({ data }) => {
   return data.map(round => {
-    let roundObj = {
+    return {
       id: round.id,
-      ...round.attributes
+      ...round.attributes,
+      question_ids: round.relationships.questions.data.map(questionEntry => {
+        return questionEntry.id;
+      })
     };
-    const question_ids = data.relationships.map(questionEntry => {
-      return questionEntry.id;
-    });
-    return { ...roundObj, question_ids: question_ids };
   });
 };
-
-const parseQuizzesSerial = data => {
+const quizzes = data => {
   let quizzes = [];
   data.data.forEach(quiz => {
     let quizObj = {
@@ -51,7 +48,7 @@ const parseQuizzesSerial = data => {
 };
 
 export default {
-  parseQuestionsSerial,
-  parseRoundsSerial,
-  parseQuizzesSerial
+  questions,
+  rounds,
+  quizzes
 };
