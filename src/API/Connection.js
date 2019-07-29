@@ -1,11 +1,10 @@
-const API_ROOT = "http://localhost:3000";
 const API_WS_ROOT = "ws://localhost:3000/cable";
+const API_BASE_URL = `https://quizcommander-b.herokuapp.com/`;
 const HEADERS = {
   "Content-Type": "application/json",
   Accept: "application/json"
 };
 
-const API_BASE_URL = `http://localhost:3000`;
 const token = () => {
   return localStorage.getItem("token");
 };
@@ -91,7 +90,6 @@ export default {
   signup,
   getCurrentUser,
   getItems,
-  API_ROOT,
   API_WS_ROOT,
   HEADERS,
   token,
