@@ -97,7 +97,7 @@ export default class EditDrawer extends Component {
         <div>
           <div className="edit-label">Question: </div>
           <input
-            size="50"
+            size="100"
             value={this.state.question_content}
             onChange={this.handleChange}
             name="question_content"
@@ -138,6 +138,7 @@ export default class EditDrawer extends Component {
   };
 
   render() {
+    debugger;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -154,9 +155,17 @@ export default class EditDrawer extends Component {
           <div>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               type="radio"
-              name="question_type"
+              name={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               value="audio"
               checked={this.state.question_type === "audio" ? true : false}
             />
@@ -168,9 +177,17 @@ export default class EditDrawer extends Component {
           <div>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               type="radio"
-              name="question_type"
+              name={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               value="video"
               checked={this.state.question_type === "video" ? true : false}
             />
@@ -181,9 +198,17 @@ export default class EditDrawer extends Component {
           <div>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               type="radio"
-              name="question_type"
+              name={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               value="text"
               checked={this.state.question_type === "text" ? true : false}
             />
@@ -192,9 +217,17 @@ export default class EditDrawer extends Component {
           <div>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               type="radio"
-              name="question_type"
+              name={
+                this.props.contentType === "rounds"
+                  ? "round_type"
+                  : "question_type"
+              }
               value="multiple"
               checked={this.state.question_type === "multiple" ? true : false}
             />

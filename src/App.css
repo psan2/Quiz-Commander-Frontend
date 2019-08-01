@@ -172,7 +172,7 @@ body {
   animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
-.lds-circle > div:after {
+.lds-circle > div:before {
   background-image: url("./Assets/quiz-commander-logo.png");
 }
 @keyframes lds-circle {

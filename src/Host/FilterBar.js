@@ -8,7 +8,7 @@ const FilterBar = props => {
           ALL
         </div>
       </div>
-      <div>
+      {/* <div>
         <img
           id="audio"
           onClick={props.handleFilter}
@@ -25,7 +25,7 @@ const FilterBar = props => {
           src={require("../Assets/video.png")}
           alt="video question icon"
         />
-      </div>
+      </div> */}
       <div>
         <img
           id="text"

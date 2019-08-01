@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+// eslint-disable-next-line
 import { Redirect } from "react-router-dom";
 import api from "../API/Connection";
 import deserializer from "../API/Deserializer";
@@ -119,9 +120,9 @@ export default class RoundOrQuizEdit extends Component {
             <label>Audio</label>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id="round_type"
               type="radio"
-              name="question_type"
+              name="round_type"
               value="audio"
               checked={this.state.item.round_type === "audio" ? true : false}
             />
@@ -130,9 +131,9 @@ export default class RoundOrQuizEdit extends Component {
             <label>Video</label>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id="round_type"
               type="radio"
-              name="question_type"
+              name="round_type"
               value="video"
               checked={this.state.item.round_type === "video" ? true : false}
             />
@@ -141,9 +142,9 @@ export default class RoundOrQuizEdit extends Component {
             <label>Text</label>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id="round_type"
               type="radio"
-              name="question_type"
+              name="round_type"
               value="text"
               checked={this.state.item.round_type === "text" ? true : false}
             />
@@ -152,9 +153,9 @@ export default class RoundOrQuizEdit extends Component {
             <label>Multiple Choice</label>
             <input
               onChange={this.handleChange}
-              id="question_type"
+              id="round_type"
               type="radio"
-              name="question_type"
+              name="round_type"
               value="multiple"
               checked={this.state.item.round_type === "multiple" ? true : false}
             />

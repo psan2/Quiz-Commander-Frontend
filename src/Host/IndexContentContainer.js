@@ -14,7 +14,7 @@ import EditDrawer from "./EditDrawer";
 
 export default class IndexContentContainer extends Component {
   state = {
-    contentItems: [],
+    contentItems: "",
     filter: "",
     editDrawerToggle: false,
     currentItem: {}
@@ -89,6 +89,7 @@ export default class IndexContentContainer extends Component {
 
   addItem = item => {
     this.setState({ contentItems: [...this.state.contentItems, item] });
+    this.closeEditDrawer();
   };
 
   editItem = editItem => {
@@ -101,6 +102,7 @@ export default class IndexContentContainer extends Component {
     });
 
     this.setState({ contentItems: newItems });
+    this.closeEditDrawer();
   };
 
   removeItem = id => {
@@ -111,7 +113,7 @@ export default class IndexContentContainer extends Component {
   };
 
   renderContent = () => {
-    if (this.state.contentItems.length === 0) {
+    if (this.state.contentItems === "") {
       return (
         <div className="lds-circle">
           <div />
@@ -168,6 +170,7 @@ export default class IndexContentContainer extends Component {
       } else if (this.props.contentType === "questions") {
         return (
           <EditDrawer
+            editItem={this.editItem}
             item={this.state.currentItem}
             contentType={this.props.contentType}
             addItem={this.addItem}
