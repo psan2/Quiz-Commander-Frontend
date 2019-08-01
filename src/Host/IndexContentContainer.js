@@ -113,44 +113,36 @@ export default class IndexContentContainer extends Component {
   };
 
   renderContent = () => {
-    if (this.state.contentItems === "") {
-      return (
-        <div className="lds-circle">
-          <div />
-        </div>
-      );
-    } else {
-      switch (this.contentType) {
-        case "questions":
-          return this.filterItems().map(question => (
-            <QuestionCard
-              key={question.id}
-              question={question}
-              openEditDrawer={this.openEditDrawer}
-              removeItem={this.removeItem}
-            />
-          ));
-        case "rounds":
-          return this.filterItems().map(round => (
-            <RoundCard
-              key={round.id}
-              round={round}
-              openEditDrawer={this.openEditDrawer}
-              removeItem={this.removeItem}
-            />
-          ));
-        case "quizzes":
-          return this.filterItems().map(quiz => (
-            <QuizCard
-              key={quiz.id}
-              quiz={quiz}
-              openEditDrawer={this.openEditDrawer}
-              removeItem={this.removeItem}
-            />
-          ));
-        default:
-          break;
-      }
+    switch (this.contentType) {
+      case "questions":
+        return this.filterItems().map(question => (
+          <QuestionCard
+            key={question.id}
+            question={question}
+            openEditDrawer={this.openEditDrawer}
+            removeItem={this.removeItem}
+          />
+        ));
+      case "rounds":
+        return this.filterItems().map(round => (
+          <RoundCard
+            key={round.id}
+            round={round}
+            openEditDrawer={this.openEditDrawer}
+            removeItem={this.removeItem}
+          />
+        ));
+      case "quizzes":
+        return this.filterItems().map(quiz => (
+          <QuizCard
+            key={quiz.id}
+            quiz={quiz}
+            openEditDrawer={this.openEditDrawer}
+            removeItem={this.removeItem}
+          />
+        ));
+      default:
+        break;
     }
   };
 
@@ -197,18 +189,30 @@ export default class IndexContentContainer extends Component {
   };
 
   render() {
-    return (
-      <div className="card-container">
-        <FilterBar
-          openEditDrawer={this.openEditDrawer}
-          handleFilter={this.handleFilter}
-          contentType={this.props.contentType}
-        />
-        <div style={{ flexBasis: "100%" }} />
-        {this.renderEditDrawer()}
-        <div style={{ flexBasis: "100%" }} />
-        {this.renderContent()}
-      </div>
-    );
+    if (this.state.contentItems === "") {
+      return (
+        <div className="spinner">
+          <img
+            style={{ width: "50vh" }}
+            src={require("../Assets/quiz-commander-logo.png")}
+            alt="quiz commander logo"
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className="card-container">
+          <FilterBar
+            openEditDrawer={this.openEditDrawer}
+            handleFilter={this.handleFilter}
+            contentType={this.props.contentType}
+          />
+          <div style={{ flexBasis: "100%" }} />
+          {this.renderEditDrawer()}
+          <div style={{ flexBasis: "100%" }} />
+          {this.renderContent()}
+        </div>
+      );
+    }
   }
 }

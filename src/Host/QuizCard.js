@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import api from "../API/Connection";
+import exportTools from "../API/ExportQuiz";
 
 export default class QuizCard extends Component {
   render() {
@@ -28,6 +29,13 @@ export default class QuizCard extends Component {
                   onClick={() => this.props.openEditDrawer(this.props.quiz.id)}
                 >
                   Edit
+                </div>
+                <div
+                  className="back-button edit"
+                  // onClick={() => exportTools.quiz(this.props.quiz.id)}
+                  onClick={() => alert("Coming soon!")}
+                >
+                  Export as CSV
                 </div>
                 <div
                   className="back-button del"

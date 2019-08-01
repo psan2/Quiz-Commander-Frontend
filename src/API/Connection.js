@@ -53,6 +53,12 @@ const getCurrentUser = persona => {
   }).then(res => res.json());
 };
 
+const getItem = (contentType, id) => {
+  return fetch(`${API_BASE_URL}/${contentType}/${id}`, {
+    headers: { ...HEADERS, Authorization: token() }
+  }).then(res => res.json());
+};
+
 const getItems = contentType => {
   return fetch(`${API_BASE_URL}/${contentType}`, {
     headers: { ...HEADERS, Authorization: token() }
@@ -90,6 +96,7 @@ export default {
   login,
   signup,
   getCurrentUser,
+  getItem,
   getItems,
   API_ROOT,
   API_WS_ROOT,
