@@ -1,0 +1,35 @@
+.new-item-types {
+  display: flex;
+  flex-wrap: wrap;
+  width: 200px;
+}
+
+.new-card-icon {
+  width: 90px;
+  height: 90px;
+  margin: 5px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: #006ba6;
+  color: #ffbc42;
+  display: inline-block;
+  border-radius: 15px;
+  perspective: 1000px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+}
+
+.new-card-icon:hover {
+  border: 2px solid #ffbc42;
+}
+
+.new-card-icon-active {
+  background-color: #0496ff;
+}
+
+.edit-label {
+  font-weight: bold;
+  margin: 10px;
+}

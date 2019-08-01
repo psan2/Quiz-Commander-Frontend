@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import api from "../API/Connection";
 
 export default class RoundCard extends Component {
@@ -49,7 +48,7 @@ export default class RoundCard extends Component {
   };
 
   render() {
-    const question_count = this.props.round.question_ids.length;
+    const question_count = this.props.round.child_ids.length;
     return (
       <div className="card">
         <div className="card-inner">
@@ -64,19 +63,35 @@ export default class RoundCard extends Component {
           </div>
           <div className="side-back">
             <div className="card-content">
-              Nickname: {this.props.round.nickname}
-              <div>
-                <Link to={`/edit-round/${this.props.round.id}`}>Edit</Link>
-              </div>
-              <div
-                onClick={() => {
-                  if (
-                    window.confirm("Are you sure you wish to delete this item?")
-                  )
-                    api.deleteItem("rounds", this.props.round.id);
-                }}
-              >
-                Delete
+              <div className="button-container">
+                <div
+                  className="back-button edit"
+                  onClick={() => this.props.openEditDrawer(this.props.round.id)}
+                >
+                  Edit
+                </div>
+                <div
+                  className="back-button del"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    ) {
+                      api
+                        .deleteItem("rounds", this.props.round.id)
+                        .then(resp => {
+                          if (resp.ok) {
+                            this.props.removeItem(this.props.round.id);
+                          } else {
+                            alert("Error, please try again.");
+                          }
+                        });
+                    }
+                  }}
+                >
+                  Delete
+                </div>
               </div>
             </div>
           </div>
@@ -85,15 +100,3 @@ export default class RoundCard extends Component {
     );
   }
 }
-
-/* <Link to={`/edit-round/${this.props.round.id}`}>
-          Edit this round
-        </Link>
-        <button
-          onClick={() => {
-            if (window.confirm("Are you sure you wish to delete this item?"))
-              api.deleteItem("rounds", this.props.round.id);
-          }}
-        >
-          Delete
-        </button> */

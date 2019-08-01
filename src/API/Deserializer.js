@@ -29,22 +29,23 @@ const rounds = ({ data }) => {
     return {
       id: round.id,
       ...round.attributes,
-      question_ids: round.relationships.questions.data.map(questionEntry => {
+      child_ids: round.relationships.questions.data.map(questionEntry => {
         return questionEntry.id;
       })
     };
   });
 };
-const quizzes = data => {
-  let quizzes = [];
-  data.data.forEach(quiz => {
-    let quizObj = {
+
+const quizzes = ({ data }) => {
+  return data.map(quiz => {
+    return {
       id: quiz.id,
-      ...quiz.attributes
+      ...quiz.attributes,
+      child_ids: quiz.relationships.rounds.data.map(roundEntry => {
+        return roundEntry.id;
+      })
     };
-    quizzes.push(quizObj);
   });
-  return quizzes;
 };
 
 export default {

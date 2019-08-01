@@ -19,6 +19,9 @@
 }
 
 .card-content {
+  font-weight: bold;
+  font-size: 1rem;
+  display: inline-block;
   padding: 10px;
 }
 
@@ -52,9 +55,27 @@
 }
 
 .side-back {
-  background-color: #006ba6;
+  background-color: #0496ff;
   color: #ffbc42;
   transform: rotateY(180deg);
   text-align: center;
   vertical-align: middle;
+}
+
+.back-button {
+  display: inline-block;
+  color: #006ba6;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.del {
+  background-color: red;
+  color: white;
+}
+
+.edit {
+  background-color: #ffbc42;
 }

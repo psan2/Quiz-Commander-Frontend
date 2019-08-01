@@ -1,5 +1,6 @@
 @import url("./Host/Card.css");
 @import url("./Host/FilterBar.css");
+@import url("./Host/EditDrawer.css");
 
 body {
   font-family: futura;
@@ -148,6 +149,12 @@ body {
 
 .toggle-button {
   display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  background-color: #ffbc42;
+  color: #0496ff;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .lds-circle {
@@ -183,4 +190,9 @@ body {
   100% {
     transform: rotateY(3600deg);
   }
+}
+
+.inactive {
+  background-color: lightgray;
+  color: white;
 }

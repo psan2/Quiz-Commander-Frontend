@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import api from "../API/Connection";
 
 export default class QuizCard extends Component {
@@ -14,25 +13,44 @@ export default class QuizCard extends Component {
                 src={require("../Assets/quiz-commander-logo.png")}
                 alt="no type quiz icon"
               />
-              <div style={{ fontWeight: "bold" }}>QUIZ NAME</div>
-              QUIZ INFO
+              <div style={{ fontWeight: "bold" }}>
+                {this.props.quiz.nickname}
+              </div>
+              {this.props.quiz.child_ids.length}{" "}
+              {this.props.quiz.child_ids.length === 1 ? "round" : "rounds"}
             </div>
           </div>
           <div className="side-back">
             <div className="card-content">
-              NICKNAME STUFF
-              <div>
-                <Link to={`/questions/edit/${this.props.quiz.id}`}>Edit</Link>
-              </div>
-              <div
-                onClick={() => {
-                  if (
-                    window.confirm("Are you sure you wish to delete this item?")
-                  )
-                    api.deleteItem("questions", this.props.question.id);
-                }}
-              >
-                Delete
+              <div className="button-container">
+                <div
+                  className="back-button edit"
+                  onClick={() => this.props.openEditDrawer(this.props.quiz.id)}
+                >
+                  Edit
+                </div>
+                <div
+                  className="back-button del"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    ) {
+                      api
+                        .deleteItem("quizzes", this.props.quiz.id)
+                        .then(resp => {
+                          if (resp.ok) {
+                            this.props.removeItem(this.props.quiz.id);
+                          } else {
+                            alert("Error, please try again.");
+                          }
+                        });
+                    }
+                  }}
+                >
+                  Delete
+                </div>
               </div>
             </div>
           </div>

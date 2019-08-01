@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import api from "../API/Connection";
 
 export default class QuestionCard extends Component {
@@ -48,6 +47,16 @@ export default class QuestionCard extends Component {
     }
   };
 
+  listAnswers = () => {
+    return this.props.question.answers.map((answer, index) => {
+      return (
+        <div key={index}>
+          A: {answer.answer_content} {answer.correct_answer ? "✓" : ""}
+        </div>
+      );
+    });
+  };
+
   render() {
     return (
       <div className="card">
@@ -55,29 +64,44 @@ export default class QuestionCard extends Component {
           <div className="side-front">
             <div className="card-content">
               {this.questionType()}
-              <div style={{ fontWeight: "bold" }}>
-                {this.props.question.nickname}
-              </div>
+              <div>{this.props.question.nickname}:</div>
               {this.props.question.question_content}
             </div>
           </div>
           <div className="side-back">
             <div className="card-content">
-              Nickname: {this.props.question.nickname}
-              <div>
-                <Link to={`/questions/edit/${this.props.question.id}`}>
+              <div>{this.listAnswers()}</div>
+              <div className="button-container">
+                <div
+                  className="back-button edit"
+                  onClick={() =>
+                    this.props.openEditDrawer(this.props.question.id)
+                  }
+                >
                   Edit
-                </Link>
-              </div>
-              <div
-                onClick={() => {
-                  if (
-                    window.confirm("Are you sure you wish to delete this item?")
-                  )
-                    api.deleteItem("questions", this.props.question.id);
-                }}
-              >
-                Delete
+                </div>
+                <div
+                  className="back-button del"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    ) {
+                      api
+                        .deleteItem("questions", this.props.question.id)
+                        .then(resp => {
+                          if (resp.ok) {
+                            this.props.removeItem(this.props.question.id);
+                          } else {
+                            alert("Error, please try again.");
+                          }
+                        });
+                    }
+                  }}
+                >
+                  Delete
+                </div>
               </div>
             </div>
           </div>
