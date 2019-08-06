@@ -1,10 +1,11 @@
 const quizCommanderReducer = (
   state = {
     quiz_in_progress: {},
-    item_in_edit: {},
-    question_library: [],
-    round_library: [],
-    quiz_library: []
+    filter: "",
+    currentItem: {},
+    questions: [],
+    rounds: [],
+    quizzes: []
   },
   action
 ) => {

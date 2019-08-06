@@ -13,16 +13,7 @@ import RoundCard from "./RoundCard";
 import QuizCard from "./QuizCard";
 import EditDrawer from "./EditDrawer";
 
-export default class IndexContentContainer extends Component {
-  state = {
-    contentItems: "",
-    filter: "",
-    editDrawerToggle: false,
-    currentItem: {}
-  };
-
-  contentType = this.props.contentType;
-
+class IndexContentContainer extends Component {
   NEW_QUESTION = {
     id: "",
     question_content: "",
@@ -30,6 +21,33 @@ export default class IndexContentContainer extends Component {
     answers: [{ answer_content: "", correct_answer: false }],
     question_type: "",
     aux_content_url: ""
+  };
+
+  mapStateToProps = (state, ownProps) => {
+    let contentItems;
+
+    switch (ownProps.contentType) {
+      case "questions":
+        contentItems = state.questions;
+        break;
+      case "rounds":
+        contentItems = state.rounds;
+        break;
+      case "quizzes":
+        contentItems = state.quizzes;
+        break;
+      default:
+        contentItems = [];
+        break;
+    }
+
+    return {
+      contentType: ownProps.contentType,
+      filter: state.filter,
+      editDrawerToggle: state.editDrawerToggle,
+      currentItem: state.currentItem,
+      contentItems: contentItems
+    };
   };
 
   componentDidMount = () => {
@@ -190,7 +208,6 @@ export default class IndexContentContainer extends Component {
   };
 
   render() {
-    debugger;
     if (this.state.contentItems === "") {
       return (
         <div className="spinner">
@@ -218,3 +235,7 @@ export default class IndexContentContainer extends Component {
     }
   }
 }
+
+export default connect(IndexContentContainer.mapStateToProps)(
+  IndexContentContainer
+);
