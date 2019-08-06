@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import FilterBar from "./FilterBar";
+import { connect } from "react-redux";
 
 //api function imports
 import api from "../API/Connection";
@@ -189,6 +190,7 @@ export default class IndexContentContainer extends Component {
   };
 
   render() {
+    debugger;
     if (this.state.contentItems === "") {
       return (
         <div className="spinner">

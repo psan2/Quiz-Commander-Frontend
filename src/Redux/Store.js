@@ -1,4 +1,8 @@
 import { createStore } from "redux";
-import qcState from "./Reducer";
+import quizCommanderReducer from "./Reducer";
 
-const store = createStore(qcState);
+const qcStore = createStore(quizCommanderReducer);
+
+dispatch = action => {
+  state = changeState(state, action);
+};
