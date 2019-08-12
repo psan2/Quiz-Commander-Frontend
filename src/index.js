@@ -1,17 +1,22 @@
+//import react functionality
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import "./index.css";
-import AppRouter from "./App";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import quizCommanderReducer from "./Redux/Reducer";
 import * as serviceWorker from "./serviceWorker";
 
-const store = createStore(
-  quizCommanderReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+//import main page routing
+import AppRouter from "./App";
+
+//import styling
+import "./index.css";
+
+//import redux functionality
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import quizCommanderReducer from "./Redux/Reducer";
+
+const store = createStore(quizCommanderReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

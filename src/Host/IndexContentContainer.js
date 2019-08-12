@@ -1,19 +1,33 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import FilterBar from "./FilterBar";
+
+//import redux tools
 import { connect } from "react-redux";
+import {
+  fetchQuestionsSuccess,
+  fetchRoundsSuccess,
+  fetchQuizzesSuccess
+} from "../Redux/Actions";
 
 //api function imports
 import api from "../API/Connection";
 import deserialize from "../API/Deserializer";
 
 //subcomponent imports
+import FilterBar from "./FilterBar";
 import QuestionCard from "./QuestionCard";
 import RoundCard from "./RoundCard";
 import QuizCard from "./QuizCard";
 import EditDrawer from "./EditDrawer";
 
 class IndexContentContainer extends Component {
+  state = {
+    loading: true,
+    filter: "",
+    currentItem: {},
+    editDrawerToggle: false
+  };
+
   NEW_QUESTION = {
     id: "",
     question_content: "",
@@ -23,48 +37,21 @@ class IndexContentContainer extends Component {
     aux_content_url: ""
   };
 
-  mapStateToProps = (state, ownProps) => {
-    let contentItems;
-
-    switch (ownProps.contentType) {
-      case "questions":
-        contentItems = state.questions;
-        break;
-      case "rounds":
-        contentItems = state.rounds;
-        break;
-      case "quizzes":
-        contentItems = state.quizzes;
-        break;
-      default:
-        contentItems = [];
-        break;
-    }
-
-    return {
-      contentType: ownProps.contentType,
-      filter: state.filter,
-      editDrawerToggle: state.editDrawerToggle,
-      currentItem: state.currentItem,
-      contentItems: contentItems
-    };
-  };
-
   componentDidMount = () => {
     this.fetchContent();
   };
 
   fetchContent = () => {
     api
-      .getItems(this.contentType)
+      .getItems(this.props.contentType)
       .then(this.transformContent)
-      .then(deserialized_content =>
-        this.setState({ contentItems: deserialized_content })
-      );
+      .then(deserialized_content => {
+        fetchQuestionsSuccess(deserialized_content);
+      });
   };
 
   transformContent = data => {
-    switch (this.contentType) {
+    switch (this.props.contentType) {
       case "questions":
         return deserialize.questions(data);
       case "rounds":
@@ -81,15 +68,15 @@ class IndexContentContainer extends Component {
   };
 
   filterItems = () => {
-    if (this.state.filter) {
-      return this.state.contentItems.filter(item => {
+    if (this.props.filter) {
+      return this.props.contentItems.filter(item => {
         return (
-          item.question_type === this.state.filter ||
-          item.round_type === this.state.filter
+          item.question_type === this.props.filter ||
+          item.round_type === this.props.filter
         );
       });
     } else {
-      return this.state.contentItems;
+      return this.props.contentItems;
     }
   };
 
@@ -98,7 +85,7 @@ class IndexContentContainer extends Component {
     this.closeEditDrawer();
     this.setState({
       editDrawerToggle: true,
-      currentItem: this.state.contentItems.find(item => item.id === id)
+      currentItem: this.props.contentItems.find(item => item.id === id)
     });
   };
 
@@ -107,12 +94,12 @@ class IndexContentContainer extends Component {
   };
 
   addItem = item => {
-    this.setState({ contentItems: [...this.state.contentItems, item] });
+    this.setState({ contentItems: [...this.props.contentItems, item] });
     this.closeEditDrawer();
   };
 
   editItem = editItem => {
-    const newItems = this.state.contentItems.map(existingItem => {
+    const newItems = this.props.contentItems.map(existingItem => {
       if (editItem.id === existingItem.id) {
         return editItem;
       } else {
@@ -125,14 +112,14 @@ class IndexContentContainer extends Component {
   };
 
   removeItem = id => {
-    const newContent = this.state.contentItems.filter(content => {
+    const newContent = this.props.contentItems.filter(content => {
       return content.id !== id;
     });
     this.setState({ contentItems: newContent });
   };
 
   renderContent = () => {
-    switch (this.contentType) {
+    switch (this.props.contentType) {
       case "questions":
         return this.filterItems().map(question => (
           <QuestionCard
@@ -166,9 +153,9 @@ class IndexContentContainer extends Component {
   };
 
   renderEditDrawer = () => {
-    if (this.state.editDrawerToggle) {
+    if (this.props.editDrawerToggle) {
       //item to be modified is an existing question
-      if (this.props.contentType === "questions" && !this.state.currentItem) {
+      if (this.props.contentType === "questions" && !this.props.currentItem) {
         return (
           <EditDrawer
             item={this.NEW_QUESTION}
@@ -182,14 +169,14 @@ class IndexContentContainer extends Component {
         return (
           <EditDrawer
             editItem={this.editItem}
-            item={this.state.currentItem}
+            item={this.props.currentItem}
             contentType={this.props.contentType}
             addItem={this.addItem}
             closeEditDrawer={this.closeEditDrawer}
           />
         );
         //item to be modified is a new round or quiz
-      } else if (!this.state.currentItem) {
+      } else if (!this.props.currentItem) {
         return <Redirect to={`/${this.props.contentType}/edit/`} />;
         //item to be modified is an existing round or quiz
       } else {
@@ -197,9 +184,9 @@ class IndexContentContainer extends Component {
           <Redirect
             to={{
               pathname: `/${this.props.contentType}/edit/${
-                this.state.currentItem.id
+                this.props.currentItem.id
               }`,
-              state: { item: this.state.currentItem }
+              state: { item: this.props.currentItem }
             }}
           />
         );
@@ -208,7 +195,7 @@ class IndexContentContainer extends Component {
   };
 
   render() {
-    if (this.state.contentItems === "") {
+    if (this.props.contentItems === "") {
       return (
         <div className="spinner">
           <img
@@ -236,6 +223,28 @@ class IndexContentContainer extends Component {
   }
 }
 
-export default connect(IndexContentContainer.mapStateToProps)(
-  IndexContentContainer
-);
+const mapStateToProps = (state, ownProps) => {
+  let contentItems;
+
+  switch (ownProps.contentType) {
+    case "questions":
+      contentItems = state.questions;
+      break;
+    case "rounds":
+      contentItems = state.rounds;
+      break;
+    case "quizzes":
+      contentItems = state.quizzes;
+      break;
+    default:
+      contentItems = [];
+      break;
+  }
+
+  return {
+    contentType: ownProps.contentType,
+    contentItems: contentItems
+  };
+};
+
+export default connect(mapStateToProps)(IndexContentContainer);

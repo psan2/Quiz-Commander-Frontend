@@ -1,8 +1,6 @@
 const quizCommanderReducer = (
   state = {
     quiz_in_progress: {},
-    filter: "",
-    currentItem: {},
     questions: [],
     rounds: [],
     quizzes: []
