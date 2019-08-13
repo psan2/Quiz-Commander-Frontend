@@ -8,11 +8,12 @@ const quizCommanderReducer = (
   action
 ) => {
   switch (action.type) {
-    case "UPDATE_QUESTION_LIBRARY":
+    case "FETCH_QUESTIONS_SUCCESS":
+      debugger;
       return { ...state, question_library: action.payload };
-    case "UPDATE_ROUND_LIBRARY":
+    case "FETCH_ROUNDS_SUCCESS":
       return { ...state, round_library: action.payload };
-    case "UPDATE_QUIZ_LIBRARY":
+    case "FETCH_QUIZZES_SUCCESS":
       return { ...state, quiz_library: action.payload };
 
     default:
