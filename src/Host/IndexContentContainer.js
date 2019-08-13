@@ -46,7 +46,7 @@ class IndexContentContainer extends Component {
       .getItems(this.props.contentType)
       .then(this.transformContent)
       .then(deserialized_content => {
-        fetchQuestionsSuccess(deserialized_content);
+        this.props.dispatch(fetchQuestionsSuccess(deserialized_content));
       });
   };
 
