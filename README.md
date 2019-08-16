@@ -1,7 +1,7 @@
 Quiz Commander is a full stack Rails and React application built for pub trivia hosts. Hosts can build a library of questions using a number of built in question types, add any number of correct (or incorrect) answers, and then use their library of pre-made questions to build rounds and full quizzes.
 
 Log in or sign up for a new host account:
-![login or signup](https://i.imgur.com/iPhdiWn.gif)
+![login or signup](https://i.imgur.com/HvQqwBx.gif)
 
 View your existing library of quiz questions (and secretly, their answers):
 ![viewing library](https://i.imgur.com/vlJfL1w.gif)
