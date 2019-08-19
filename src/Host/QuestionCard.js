@@ -57,6 +57,69 @@ export default class QuestionCard extends Component {
     });
   };
 
+  renderAddRemoveButtons = () => {
+    if (this.props.added === false) {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.addQuestion(this.props.question.id)}
+          >
+            Add
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button del"
+            onClick={() => this.props.addQuestion(this.props.question.id)}
+          >
+            Remove
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
+  editOrDelete = () => {
+    if (this.props.edit === true) {
+      return this.renderAddRemoveButtons();
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.openEditDrawer(this.props.question.id)}
+          >
+            Edit
+          </div>
+          <div
+            className="back-button del"
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you wish to delete this item?")
+              ) {
+                api
+                  .deleteItem("questions", this.props.question.id)
+                  .then(resp => {
+                    if (resp.ok) {
+                      this.props.removeItem(this.props.question.id);
+                    } else {
+                      alert("Error, please try again.");
+                    }
+                  });
+              }
+            }}
+          >
+            Delete
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
   render() {
     return (
       <div className="card">
@@ -71,38 +134,7 @@ export default class QuestionCard extends Component {
           <div className="side-back">
             <div className="card-content">
               <div>{this.listAnswers()}</div>
-              <div className="button-container">
-                <div
-                  className="back-button edit"
-                  onClick={() =>
-                    this.props.openEditDrawer(this.props.question.id)
-                  }
-                >
-                  Edit
-                </div>
-                <div
-                  className="back-button del"
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Are you sure you wish to delete this item?"
-                      )
-                    ) {
-                      api
-                        .deleteItem("questions", this.props.question.id)
-                        .then(resp => {
-                          if (resp.ok) {
-                            this.props.removeItem(this.props.question.id);
-                          } else {
-                            alert("Error, please try again.");
-                          }
-                        });
-                    }
-                  }}
-                >
-                  Delete
-                </div>
-              </div>
+              <div className="button-container">{this.editOrDelete()}</div>
             </div>
           </div>
         </div>

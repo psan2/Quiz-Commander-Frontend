@@ -3,24 +3,33 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import api from "../API/Connection";
 import deserializer from "../API/Deserializer";
+import LibraryContainer from "./LibraryContainer";
+import AddedContainer from "./AddedContainer";
 
 export default class RoundOrQuizEdit extends Component {
-  state = { item: this.props.item, children: [] };
+  state = { item: this.props.item, library: [], added: [] };
 
   contentType = this.props.contentType;
+  childType = this.props.contentType === "quizzes" ? "rounds" : "questions";
 
   componentDidMount = () => {
-    const childType =
-      this.props.contentType === "quizzes" ? "rounds" : "questions";
-    if (childType === "rounds") {
-      api.getItems(childType).then(entries => {
-        this.setState({ children: deserializer.rounds(entries) });
-      });
+    api.getItems(this.childType).then(this.parseChildren);
+  };
+
+  parseChildren = entries => {
+    let children;
+    if (this.childType === "rounds") {
+      children = deserializer.rounds(entries);
     } else {
-      api.getItems(childType).then(entries => {
-        this.setState({ children: deserializer.questions(entries) });
-      });
+      children = deserializer.questions(entries);
     }
+
+    let added = [];
+    let library = [];
+    for (const child of children) {
+      this.childInParent(child.id) ? added.push(child) : library.push(child);
+    }
+    this.setState({ library: library, added: added });
   };
 
   handleChange = e => {
@@ -38,7 +47,7 @@ export default class RoundOrQuizEdit extends Component {
     if (targetIndex >= 0) {
       currentChildren.splice(targetIndex, 1);
     } else {
-      const targetChild = this.state.children.find(child => {
+      const targetChild = this.state.library.find(child => {
         return child.id === e.target.id;
       });
       currentChildren.push(targetChild.id);
@@ -54,7 +63,7 @@ export default class RoundOrQuizEdit extends Component {
 
   generateChildEntries = () => {
     if (this.contentType === "quizzes") {
-      return this.state.children.map(child => {
+      return this.state.library.map(child => {
         return (
           <div key={child.id}>
             <input
@@ -70,7 +79,7 @@ export default class RoundOrQuizEdit extends Component {
         );
       });
     } else {
-      return this.state.children.map(child => {
+      return this.state.library.map(child => {
         return (
           <div key={child.id}>
             <input
@@ -109,62 +118,6 @@ export default class RoundOrQuizEdit extends Component {
     }
   };
 
-  renderRoundTypes = () => {
-    if (this.contentType === "rounds") {
-      return (
-        <div>
-          <div>
-            <div className="edit-label">Type</div>
-          </div>
-          <div>
-            <label>Audio</label>
-            <input
-              onChange={this.handleChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="audio"
-              checked={this.state.item.round_type === "audio" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Video</label>
-            <input
-              onChange={this.handleChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="video"
-              checked={this.state.item.round_type === "video" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Text</label>
-            <input
-              onChange={this.handleChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="text"
-              checked={this.state.item.round_type === "text" ? true : false}
-            />
-          </div>
-          <div>
-            <label>Multiple Choice</label>
-            <input
-              onChange={this.handleChange}
-              id="round_type"
-              type="radio"
-              name="round_type"
-              value="multiple"
-              checked={this.state.item.round_type === "multiple" ? true : false}
-            />
-          </div>
-        </div>
-      );
-    }
-  };
-
   render() {
     return (
       <div>
@@ -176,13 +129,26 @@ export default class RoundOrQuizEdit extends Component {
             value={this.state.item.nickname}
             onChange={this.handleChange}
           />
-          {this.renderRoundTypes()}
           <div>
-            <h4>{this.contentType === "quizzes" ? "Rounds" : "Questions"}:</h4>
-            {this.generateChildEntries()}
+            <h4>
+              {this.contentType === "quizzes" ? "Rounds" : "Questions"} Added:
+            </h4>
+            <AddedContainer
+              contentType={this.contentType}
+              added={this.state.added}
+            />
           </div>
           <div>
-            <button onClick={this.submitItem}>Submit</button>
+            <h4>
+              {this.contentType === "quizzes" ? "Round" : "Question"} Library:
+            </h4>
+            <LibraryContainer
+              contentType={this.contentType}
+              library={this.state.library}
+            />
+          </div>
+          <div>
+            <button onClick={this.submitItem}>Save</button>
           </div>
         </form>
       </div>
