@@ -38,63 +38,54 @@ export default class RoundOrQuizEdit extends Component {
     });
   };
 
-  toggleChild = e => {
-    const currentChildren = this.state.item.child_ids;
-    const targetIndex = currentChildren.findIndex(child => {
-      return child === e.target.id;
-    });
-
-    if (targetIndex >= 0) {
-      currentChildren.splice(targetIndex, 1);
-    } else {
-      const targetChild = this.state.library.find(child => {
-        return child.id === e.target.id;
-      });
-      currentChildren.push(targetChild.id);
-    }
-    this.setState({
-      item: { ...this.state.item, child_ids: currentChildren }
-    });
-  };
-
   childInParent = id => {
     return this.state.item.child_ids.includes(id);
   };
 
-  generateChildEntries = () => {
-    if (this.contentType === "quizzes") {
-      return this.state.library.map(child => {
-        return (
-          <div key={child.id}>
-            <input
-              type="checkbox"
-              id={child.id}
-              onChange={this.toggleChild}
-              checked={this.childInParent(child.id)}
-            />
-            <label>
-              {child.nickname}: {child.round_type}
-            </label>
-          </div>
-        );
-      });
-    } else {
-      return this.state.library.map(child => {
-        return (
-          <div key={child.id}>
-            <input
-              type="checkbox"
-              id={child.id}
-              onChange={this.toggleChild}
-              checked={this.childInParent(child.id)}
-            />
-            <label>
-              {child.nickname}: {child.question_content}
-            </label>
-          </div>
-        );
-      });
-    }
+  addChild = id => {
+    const target = this.state.library.find(child => child.id === id);
+    const library = this.state.library.filter(child => {
+      return child.id !== id;
+    });
+    const added = this.state.added;
+    added.push(target);
+
+    this.setState({ library: library, added: added });
+  };
+
+  removeChild = id => {
+    const target = this.state.added.find(child => child.id === id);
+    const added = this.state.added.filter(child => {
+      return child.id !== id;
+    });
+    const library = this.state.library;
+    library.push(target);
+
+    this.setState({ library: library, added: added });
+  };
+
+  reorderAdded = (id, direction) => {
+    const reorderedArray = this.state.added;
+
+    const targetCurrentIndex = reorderedArray.findIndex(
+      child => child.id === id
+    );
+    const target = reorderedArray.splice(targetCurrentIndex, 1)[0];
+
+    const newIndex = () => {
+      const newIndex = targetCurrentIndex + direction;
+
+      if (newIndex > this.state.added.length) {
+        return this.state.added.length - 1;
+      } else if (newIndex < 0) {
+        return 0;
+      } else {
+        return newIndex;
+      }
+    };
+
+    reorderedArray.splice(newIndex(), 0, target);
+    this.setState({ added: reorderedArray });
   };
 
   handleSubmit = e => {
@@ -130,12 +121,19 @@ export default class RoundOrQuizEdit extends Component {
             onChange={this.handleChange}
           />
           <div>
+            <button className="back-button edit" onClick={this.submitItem}>
+              Save
+            </button>
+          </div>
+          <div>
             <h4>
               {this.contentType === "quizzes" ? "Rounds" : "Questions"} Added:
             </h4>
             <AddedContainer
               contentType={this.contentType}
               added={this.state.added}
+              removeChild={this.removeChild}
+              reorderAdded={this.reorderAdded}
             />
           </div>
           <div>
@@ -145,10 +143,8 @@ export default class RoundOrQuizEdit extends Component {
             <LibraryContainer
               contentType={this.contentType}
               library={this.state.library}
+              addChild={this.addChild}
             />
-          </div>
-          <div>
-            <button onClick={this.submitItem}>Save</button>
           </div>
         </form>
       </div>

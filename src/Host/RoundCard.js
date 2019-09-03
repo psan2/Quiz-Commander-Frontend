@@ -47,6 +47,32 @@ export default class RoundCard extends Component {
     }
   };
 
+  renderAddRemoveButtons = () => {
+    if (this.props.added === false) {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.addChild(this.props.round.id)}
+          >
+            Add
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button del"
+            onClick={() => this.props.removeChild(this.props.round.id)}
+          >
+            Remove
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
   render() {
     const question_count = this.props.round.child_ids.length;
     return (

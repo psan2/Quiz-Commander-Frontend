@@ -63,7 +63,7 @@ export default class QuestionCard extends Component {
         <React.Fragment>
           <div
             className="back-button edit"
-            onClick={() => this.props.addQuestion(this.props.question.id)}
+            onClick={() => this.props.addChild(this.props.question.id)}
           >
             Add
           </div>
@@ -74,9 +74,22 @@ export default class QuestionCard extends Component {
         <React.Fragment>
           <div
             className="back-button del"
-            onClick={() => this.props.addQuestion(this.props.question.id)}
+            onClick={() => this.props.removeChild(this.props.question.id)}
           >
             Remove
+          </div>
+          <br />
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.question.id, -1)}
+          >
+            ◄
+          </div>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.question.id, 1)}
+          >
+            ►
           </div>
         </React.Fragment>
       );

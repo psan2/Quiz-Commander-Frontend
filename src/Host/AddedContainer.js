@@ -2,7 +2,7 @@ import React from "react";
 import RoundCard from "./RoundCard";
 import QuestionCard from "./QuestionCard";
 
-const mapContent = (contentType, added) => {
+const mapContent = (contentType, added, removeChild, reorderAdded) => {
   switch (contentType) {
     case "rounds":
       return added.map(child => {
@@ -12,13 +12,22 @@ const mapContent = (contentType, added) => {
             question={child}
             edit={true}
             added={true}
+            removeChild={removeChild}
+            reorderAdded={reorderAdded}
           />
         );
       });
     case "quizzes":
       return added.map(child => {
         return (
-          <RoundCard key={child.id} question={child} edit={true} added={true} />
+          <RoundCard
+            key={child.id}
+            question={child}
+            edit={true}
+            added={true}
+            removeChild={removeChild}
+            reorderAdded={reorderAdded}
+          />
         );
       });
     default:
@@ -26,8 +35,8 @@ const mapContent = (contentType, added) => {
   }
 };
 
-const AddedContainer = props => {
-  return <div>{mapContent(props.contentType, props.added)}</div>;
+const AddedContainer = ({ contentType, added, removeChild, reorderAdded }) => {
+  return <div>{mapContent(contentType, added, removeChild, reorderAdded)}</div>;
 };
 
 export default AddedContainer;

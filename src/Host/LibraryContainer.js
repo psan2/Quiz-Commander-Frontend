@@ -2,7 +2,7 @@ import React from "react";
 import RoundCard from "./RoundCard";
 import QuestionCard from "./QuestionCard";
 
-const mapContent = (contentType, library) => {
+const mapContent = (contentType, library, addChild) => {
   switch (contentType) {
     case "rounds":
       return library.map(child => {
@@ -12,6 +12,7 @@ const mapContent = (contentType, library) => {
             question={child}
             edit={true}
             added={false}
+            addChild={addChild}
           />
         );
       });
@@ -23,6 +24,7 @@ const mapContent = (contentType, library) => {
             question={child}
             edit={true}
             added={false}
+            addChild={addChild}
           />
         );
       });
@@ -31,8 +33,8 @@ const mapContent = (contentType, library) => {
   }
 };
 
-const AddedContainer = props => {
-  return <div>{mapContent(props.contentType, props.library)}</div>;
+const AddedContainer = ({ contentType, library, addChild }) => {
+  return <div>{mapContent(contentType, library, addChild)}</div>;
 };
 
 export default AddedContainer;
