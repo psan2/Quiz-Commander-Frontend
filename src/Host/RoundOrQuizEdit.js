@@ -73,10 +73,11 @@ export default class RoundOrQuizEdit extends Component {
     const target = reorderedArray.splice(targetCurrentIndex, 1)[0];
 
     const newIndex = () => {
+      debugger;
       const newIndex = targetCurrentIndex + direction;
 
       if (newIndex > this.state.added.length) {
-        return this.state.added.length - 1;
+        return this.state.added.length;
       } else if (newIndex < 0) {
         return 0;
       } else {

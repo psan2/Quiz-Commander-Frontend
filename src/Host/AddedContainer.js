@@ -22,7 +22,7 @@ const mapContent = (contentType, added, removeChild, reorderAdded) => {
         return (
           <RoundCard
             key={child.id}
-            question={child}
+            round={child}
             edit={true}
             added={true}
             removeChild={removeChild}

@@ -21,7 +21,7 @@ const mapContent = (contentType, library, addChild) => {
         return (
           <RoundCard
             key={child.id}
-            question={child}
+            round={child}
             edit={true}
             added={false}
             addChild={addChild}
