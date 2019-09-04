@@ -5,9 +5,11 @@ export default class HostLanding extends Component {
   render() {
     return (
       <div>
-        <div className="host-landing-row">
-          <NavLink className="host-landing-button double">Start a Quiz</NavLink>
-        </div>
+        {/* <div className="host-landing-row">
+          <NavLink className="host-landing-button double inactive">
+            Start a Quiz
+          </NavLink>
+        </div> */}
         <div className="host-landing-row">
           <NavLink className="host-landing-button" to="/quizzes/edit">
             Create a Quiz
@@ -25,7 +27,7 @@ export default class HostLanding extends Component {
           </NavLink>
         </div>
         <div className="host-landing-row">
-          <NavLink className="host-landing-button" to="/questions/edit">
+          <NavLink className="host-landing-button" to="/questions">
             Create a Question
           </NavLink>
           <NavLink className="host-landing-button" to="/questions">

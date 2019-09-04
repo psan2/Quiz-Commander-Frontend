@@ -9,16 +9,16 @@ const token = () => {
   return localStorage.getItem("token");
 };
 
-const singularContentItem = content_type => {
-  switch (content_type) {
+const singularContentItem = contentType => {
+  switch (contentType) {
     case "questions":
       return "question";
     case "rounds":
-      return "rounds";
+      return "round";
     case "quizzes":
       return "quiz";
     default:
-      return content_type.slice(0, content_type.length - 1);
+      return contentType.slice(0, contentType.length - 1);
   }
 };
 
@@ -52,34 +52,40 @@ const getCurrentUser = persona => {
   }).then(res => res.json());
 };
 
-const getItems = content_type => {
-  return fetch(`${API_BASE_URL}/${content_type}`, {
+const getItem = (contentType, id) => {
+  return fetch(`${API_BASE_URL}/${contentType}/${id}`, {
     headers: { ...HEADERS, Authorization: token() }
   }).then(res => res.json());
 };
 
-const updateItem = (content_type, content_item) => {
-  const submission = { [singularContentItem(content_type)]: content_item };
+const getItems = contentType => {
+  return fetch(`${API_BASE_URL}/${contentType}`, {
+    headers: { ...HEADERS, Authorization: token() }
+  }).then(res => res.json());
+};
 
-  return fetch(`${API_BASE_URL}/${content_type}/${content_item.id}`, {
+const updateItem = (contentType, content_item) => {
+  const submission = { [singularContentItem(contentType)]: content_item };
+
+  return fetch(`${API_BASE_URL}/${contentType}/${content_item.id}`, {
     method: "PATCH",
     headers: { ...HEADERS, Authorization: token() },
     body: JSON.stringify(submission)
   }).then(res => res.json());
 };
 
-const createItem = (content_type, content_item) => {
-  const submission = { [singularContentItem(content_type)]: content_item };
+const createItem = (contentType, content_item) => {
+  const submission = { [singularContentItem(contentType)]: content_item };
 
-  return fetch(`${API_BASE_URL}/${content_type}/`, {
+  return fetch(`${API_BASE_URL}/${contentType}/`, {
     method: "POST",
     headers: { ...HEADERS, Authorization: token() },
     body: JSON.stringify(submission)
   }).then(res => res.json());
 };
 
-const deleteItem = (content_type, content_id) => {
-  return fetch(`${API_BASE_URL}/${content_type}/${content_id}`, {
+const deleteItem = (contentType, content_id) => {
+  return fetch(`${API_BASE_URL}/${contentType}/${content_id}`, {
     method: "DELETE",
     headers: { ...HEADERS, Authorization: token() }
   });
@@ -89,6 +95,7 @@ export default {
   login,
   signup,
   getCurrentUser,
+  getItem,
   getItems,
   API_WS_ROOT,
   HEADERS,

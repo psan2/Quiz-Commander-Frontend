@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import api from "../API/Connection";
 
 export default class QuestionCard extends Component {
@@ -48,6 +47,92 @@ export default class QuestionCard extends Component {
     }
   };
 
+  listAnswers = () => {
+    return this.props.question.answers.map((answer, index) => {
+      return (
+        <div key={index}>
+          A: {answer.answer_content} {answer.correct_answer ? "✓" : ""}
+        </div>
+      );
+    });
+  };
+
+  renderAddRemoveButtons = () => {
+    if (this.props.added === false) {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.addChild(this.props.question.id)}
+          >
+            Add
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button del"
+            onClick={() => this.props.removeChild(this.props.question.id)}
+          >
+            Remove
+          </div>
+          <br />
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.question.id, -1)}
+          >
+            ◄
+          </div>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.question.id, 1)}
+          >
+            ►
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
+  editOrDelete = () => {
+    if (this.props.edit === true) {
+      return this.renderAddRemoveButtons();
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.openEditDrawer(this.props.question.id)}
+          >
+            Edit
+          </div>
+          <div
+            className="back-button del"
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you wish to delete this item?")
+              ) {
+                api
+                  .deleteItem("questions", this.props.question.id)
+                  .then(resp => {
+                    if (resp.ok) {
+                      this.props.removeItem(this.props.question.id);
+                    } else {
+                      alert("Error, please try again.");
+                    }
+                  });
+              }
+            }}
+          >
+            Delete
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
   render() {
     return (
       <div className="card">
@@ -55,30 +140,14 @@ export default class QuestionCard extends Component {
           <div className="side-front">
             <div className="card-content">
               {this.questionType()}
-              <div style={{ fontWeight: "bold" }}>
-                {this.props.question.nickname}
-              </div>
+              <div>{this.props.question.nickname}:</div>
               {this.props.question.question_content}
             </div>
           </div>
           <div className="side-back">
             <div className="card-content">
-              Nickname: {this.props.question.nickname}
-              <div>
-                <Link to={`/questions/edit/${this.props.question.id}`}>
-                  Edit
-                </Link>
-              </div>
-              <div
-                onClick={() => {
-                  if (
-                    window.confirm("Are you sure you wish to delete this item?")
-                  )
-                    api.deleteItem("questions", this.props.question.id);
-                }}
-              >
-                Delete
-              </div>
+              <div>{this.listAnswers()}</div>
+              <div className="button-container">{this.editOrDelete()}</div>
             </div>
           </div>
         </div>

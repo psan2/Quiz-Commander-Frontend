@@ -34,12 +34,12 @@ const NavBar = props => {
         >
           Quizzes
         </NavLink>
-        <NavLink
+        {/* <NavLink
           className="navbar-button"
           activeClassName="navbar-button-active"
         >
           Analytics
-        </NavLink>
+        </NavLink> */}
       </div>
       <div
         className="logout-button"
@@ -47,7 +47,9 @@ const NavBar = props => {
           props.handleLogOut();
         }}
       >
-        Log<br />Out
+        Log
+        <br />
+        Out
       </div>
     </div>
   );

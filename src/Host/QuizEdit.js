@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import api from "../../API/Connection";
+import api from "../API/Connection";
 
 export default class QuizEdit extends Component {
   state = {

@@ -18,6 +18,7 @@ export default class StartPage extends Component {
   };
 
   handleChange = e => {
+    e.preventDefault();
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -29,8 +30,8 @@ export default class StartPage extends Component {
       .login(this.state.username, this.state.password, this.state.persona)
       .then(data => {
         if (data.error) {
-          alert("Please re-enter your username and password and try again.");
           this.setState({ username: "", password: "" });
+          alert("Please re-enter your username and password and try again.");
         } else {
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("persona", this.state.persona);
@@ -75,6 +76,8 @@ export default class StartPage extends Component {
           persona={this.state.persona}
           onLoginClicked={this.onLoginClicked}
           handleChange={this.handleChange}
+          username={this.state.username}
+          password={this.state.password}
         />
       );
     } else if (this.state.persona && this.state.loginSignup === "signup") {
@@ -84,6 +87,10 @@ export default class StartPage extends Component {
           persona={this.state.persona}
           onSignupClicked={this.onSignupClicked}
           handleChange={this.handleChange}
+          username={this.state.username}
+          password={this.state.password}
+          password_confirmation={this.state.password_confirmation}
+          email={this.state.email}
         />
       );
     }
@@ -94,7 +101,7 @@ export default class StartPage extends Component {
       return (
         <div>
           <div>
-            <div
+            {/* <div
               name="persona"
               value="hosts"
               onClick={this.handleChange}
@@ -111,7 +118,7 @@ export default class StartPage extends Component {
               style={{ float: "right" }}
             >
               Teams
-            </div>
+            </div> */}
             {/* {this.capitalize(this.state.loginSignup)} as: */}
             {/* <select onChange={this.handleChange} name="persona" id="persona">
               <option value="hosts">Host</option>
@@ -119,6 +126,28 @@ export default class StartPage extends Component {
             </select> */}
             {this.renderLoginOrSignupPrompt()}
           </div>
+        </div>
+      );
+    }
+  };
+
+  loginOrSignupButton = () => {
+    if (this.state.loginSignup === "signup") {
+      return (
+        <div
+          className="toggle-button"
+          onClick={() => this.setState({ loginSignup: "login" })}
+        >
+          Already a QuizCommander Host?
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="toggle-button"
+          onClick={() => this.setState({ loginSignup: "signup" })}
+        >
+          New to QuizCommander?
         </div>
       );
     }
@@ -173,18 +202,7 @@ export default class StartPage extends Component {
         <div className="login-flex-right-column">
           <div className="signup-login-container">
             {this.headerToggle()}
-            <div
-              className="toggle-button"
-              onClick={() => this.setState({ loginSignup: "login" })}
-            >
-              Login
-            </div>
-            <div
-              className="toggle-button"
-              onClick={() => this.setState({ loginSignup: "signup" })}
-            >
-              Signup
-            </div>
+            <div>{this.loginOrSignupButton()}</div>
           </div>
         </div>
       </div>
