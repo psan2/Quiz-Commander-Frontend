@@ -4,6 +4,10 @@
 
 [Video Demo](https://youtu.be/5yVXY5w83bE)
 
+**Please note: a demo login is available if you'd like to test out the app. Log in using these credentials:
+Username: demo
+Password: password**
+
 ## About
 
 Quiz Commander was inspired by my experience using spreadsheets to manage my pub trivia questions (and making a proper mess of it). This app allows hosts to build questions into a library, and then mix and match those questions into new rounds and quizzes. Question types will soon allow for audio and video rounds, and we'll be adding new round types on an ongoing basis. Future improvements also include the ability to export whole quizzes to CSVs, as well as functionality to allow teams to answer questions directly from their phones!
