@@ -46,7 +46,6 @@ export default class QuizEdit extends Component {
   };
 
   render() {
-    debugger;
     return (
       <div>
         <form onSubmit={e => e.preventDefault()}>

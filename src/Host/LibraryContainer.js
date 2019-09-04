@@ -33,8 +33,8 @@ const mapContent = (contentType, library, addChild) => {
   }
 };
 
-const AddedContainer = ({ contentType, library, addChild }) => {
+const LibraryContainer = ({ contentType, library, addChild }) => {
   return <div>{mapContent(contentType, library, addChild)}</div>;
 };
 
-export default AddedContainer;
+export default LibraryContainer;

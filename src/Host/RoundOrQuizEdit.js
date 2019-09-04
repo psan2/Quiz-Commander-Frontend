@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-// eslint-disable-next-line
-import { Redirect } from "react-router-dom";
 import api from "../API/Connection";
 import deserializer from "../API/Deserializer";
 import LibraryContainer from "./LibraryContainer";
@@ -27,7 +25,12 @@ export default class RoundOrQuizEdit extends Component {
     let added = [];
     let library = [];
     for (const child of children) {
-      this.childInParent(child.id) ? added.push(child) : library.push(child);
+      const index = this.indexOfChild(child.id);
+      if (index) {
+        added.push({ ...child, index: index });
+      } else {
+        library.push(child);
+      }
     }
     this.setState({ library: library, added: added });
   };
@@ -38,16 +41,28 @@ export default class RoundOrQuizEdit extends Component {
     });
   };
 
-  childInParent = id => {
-    return this.state.item.child_ids.includes(id);
+  indexOfChild = idString => {
+    const inRound = this.state.item.children.find(
+      rq => rq.child_id === parseInt(idString)
+    );
+
+    if (inRound) {
+      return inRound.index;
+    } else {
+      return false;
+    }
   };
 
   addChild = id => {
-    const target = this.state.library.find(child => child.id === id);
+    const added = this.state.added;
     const library = this.state.library.filter(child => {
       return child.id !== id;
     });
-    const added = this.state.added;
+
+    const target = {
+      ...this.state.library.find(child => child.id === id),
+      index: added.length + 1
+    };
     added.push(target);
 
     this.setState({ library: library, added: added });
@@ -67,42 +82,41 @@ export default class RoundOrQuizEdit extends Component {
   reorderAdded = (id, direction) => {
     const reorderedArray = this.state.added;
 
-    const targetCurrentIndex = reorderedArray.findIndex(
-      child => child.id === id
-    );
-    const target = reorderedArray.splice(targetCurrentIndex, 1)[0];
+    const targetItem = reorderedArray.find(child => child.id === id);
+    const destinationIndex = targetItem.index + direction;
+    if (destinationIndex < 0 || destinationIndex > reorderedArray.length) {
+      return;
+    }
+    const itemInDestination = reorderedArray[destinationIndex - 1];
+    itemInDestination.index = targetItem.index;
+    targetItem.index = destinationIndex;
 
-    const newIndex = () => {
-      debugger;
-      const newIndex = targetCurrentIndex + direction;
-
-      if (newIndex > this.state.added.length) {
-        return this.state.added.length;
-      } else if (newIndex < 0) {
-        return 0;
-      } else {
-        return newIndex;
-      }
-    };
-
-    reorderedArray.splice(newIndex(), 0, target);
     this.setState({ added: reorderedArray });
   };
 
   handleSubmit = e => {
     e.preventDefault();
+
+    const payload = {
+      id: this.state.item.id,
+      nickname: this.state.item.nickname,
+      children: this.state.added.map(child => {
+        return { id: child.id, index: child.index };
+      })
+    };
+
     if (this.state.item.id) {
-      api.updateItem(this.props.contentType, this.state.item).then(data => {
+      api.updateItem(this.props.contentType, payload).then(data => {
         if (data.error) {
-          alert(data.error);
+          alert("Sorry, something went wrong. Please try again.");
         } else {
           alert("Updated!");
         }
       });
     } else {
-      api.createItem(this.props.contentType, this.state.item).then(data => {
+      api.createItem(this.props.contentType, payload).then(data => {
         if (data.error) {
-          alert(data.error);
+          alert("Sorry, something went wrong. Please try again.");
         } else {
           alert("Created!");
         }

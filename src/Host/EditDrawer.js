@@ -138,7 +138,6 @@ export default class EditDrawer extends Component {
   };
 
   render() {
-    debugger;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>

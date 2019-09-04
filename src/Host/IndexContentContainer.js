@@ -177,9 +177,7 @@ export default class IndexContentContainer extends Component {
         return (
           <Redirect
             to={{
-              pathname: `/${this.props.contentType}/edit/${
-                this.state.currentItem.id
-              }`,
+              pathname: `/${this.props.contentType}/edit/${this.state.currentItem.id}`,
               state: { item: this.state.currentItem }
             }}
           />

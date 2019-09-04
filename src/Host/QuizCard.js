@@ -17,8 +17,8 @@ export default class QuizCard extends Component {
               <div style={{ fontWeight: "bold" }}>
                 {this.props.quiz.nickname}
               </div>
-              {this.props.quiz.child_ids.length}{" "}
-              {this.props.quiz.child_ids.length === 1 ? "round" : "rounds"}
+              {this.props.quiz.children.length}{" "}
+              {this.props.quiz.children.length === 1 ? "round" : "rounds"}
             </div>
           </div>
           <div className="side-back">
@@ -32,8 +32,8 @@ export default class QuizCard extends Component {
                 </div>
                 <div
                   className="back-button edit"
-                  onClick={() => exportTools.quiz(this.props.quiz.id)}
-                  // onClick={() => alert("Coming soon!")}
+                  // onClick={() => exportTools.quiz(this.props.quiz.id)}
+                  onClick={() => alert("Coming soon!")}
                 >
                   Export as CSV
                 </div>

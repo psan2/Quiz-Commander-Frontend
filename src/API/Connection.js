@@ -15,7 +15,7 @@ const singularContentItem = contentType => {
     case "questions":
       return "question";
     case "rounds":
-      return "rounds";
+      return "round";
     case "quizzes":
       return "quiz";
     default:

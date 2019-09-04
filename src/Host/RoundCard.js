@@ -122,7 +122,7 @@ export default class RoundCard extends Component {
   };
 
   render() {
-    const question_count = this.props.round.child_ids.length;
+    const question_count = this.props.round.children.length;
 
     return (
       <div className="card">
@@ -133,7 +133,7 @@ export default class RoundCard extends Component {
               <div style={{ fontWeight: "bold" }}>
                 {this.props.round.nickname}
               </div>
-              {question_count} {question_count > 1 ? "questions" : "question"}
+              {question_count} {question_count === 1 ? "question" : "questions"}
             </div>
           </div>
           <div className="side-back">

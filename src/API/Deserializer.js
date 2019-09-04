@@ -24,26 +24,46 @@ const questions = data => {
   return questions;
 };
 
-const rounds = ({ data }) => {
+const rounds = ({ data, included }) => {
   return data.map(round => {
     return {
       id: round.id,
       ...round.attributes,
-      child_ids: round.relationships.questions.data.map(questionEntry => {
-        return questionEntry.id;
-      })
+      children: included
+        .filter(item => {
+          return (
+            item.type === "round_question" &&
+            item.attributes.round_id === parseInt(round.id)
+          );
+        })
+        .map(roundQuestion => {
+          return {
+            child_id: roundQuestion.attributes.question_id,
+            index: roundQuestion.attributes.index_in_round
+          };
+        })
     };
   });
 };
 
-const quizzes = ({ data }) => {
+const quizzes = ({ data, included }) => {
   return data.map(quiz => {
     return {
       id: quiz.id,
       ...quiz.attributes,
-      child_ids: quiz.relationships.rounds.data.map(roundEntry => {
-        return roundEntry.id;
-      })
+      children: included
+        .filter(item => {
+          return (
+            item.type === "quiz_round" &&
+            item.attributes.quiz_id === parseInt(quiz.id)
+          );
+        })
+        .map(quizRound => {
+          return {
+            child_id: quizRound.attributes.round_id,
+            index: quizRound.attributes.index_in_quiz
+          };
+        })
     };
   });
 };
