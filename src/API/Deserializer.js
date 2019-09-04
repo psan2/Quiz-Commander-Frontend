@@ -48,8 +48,64 @@ const quizzes = ({ data }) => {
   });
 };
 
+const quiz = ({ data, included }) => {
+  const quizObj = {
+    id: data.id,
+    ...data.attributes,
+    rounds: included
+      .filter(element => {
+        return element.type === "round";
+      })
+      .map(round => {
+        return {
+          id: round.id,
+          ...round.attributes,
+          questions: parseIncludedQuestions(round, included)
+        };
+      })
+  };
+  return quizObj;
+};
+
+const parseIncludedQuestions = (round, included) => {
+  const question_ids = round.relationships.questions.data.map(
+    question => question.id
+  );
+  const questions = included
+    .filter(element => {
+      return element.type === "question" && question_ids.includes(element.id);
+    })
+    .map(question => {
+      return {
+        id: question.id,
+        ...question.attributes,
+        answers: parseIncludedAnswers(question, included)
+      };
+    });
+  return questions;
+};
+
+const parseIncludedAnswers = (question, included) => {
+  const answer_ids = question.relationships.answers.data.map(
+    answer => answer.id
+  );
+  const answers = included
+    .filter(element => {
+      return element.type === "answer" && answer_ids.includes(element.id);
+    })
+    .map(answer => {
+      return {
+        id: answer.id,
+        correct_answer: answer.attributes.correct_answer,
+        answer_content: answer.attributes.answer_content
+      };
+    });
+  return answers;
+};
+
 export default {
   questions,
   rounds,
-  quizzes
+  quizzes,
+  quiz
 };

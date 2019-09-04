@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import api from "../API/Connection";
-import exportTools from "../API/ExportQuiz";
+import exportTools from "../API/ExportTools";
 
 export default class QuizCard extends Component {
   render() {
@@ -32,8 +32,8 @@ export default class QuizCard extends Component {
                 </div>
                 <div
                   className="back-button edit"
-                  // onClick={() => exportTools.quiz(this.props.quiz.id)}
-                  onClick={() => alert("Coming soon!")}
+                  onClick={() => exportTools.quiz(this.props.quiz.id)}
+                  // onClick={() => alert("Coming soon!")}
                 >
                   Export as CSV
                 </div>

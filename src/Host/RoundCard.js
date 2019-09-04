@@ -47,8 +47,83 @@ export default class RoundCard extends Component {
     }
   };
 
+  renderAddRemoveButtons = () => {
+    if (this.props.added === false) {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.addChild(this.props.round.id)}
+          >
+            Add
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button del"
+            onClick={() => this.props.removeChild(this.props.round.id)}
+          >
+            Remove
+          </div>
+          <br />
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.round.id, -1)}
+          >
+            ◄
+          </div>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.reorderAdded(this.props.round.id, 1)}
+          >
+            ►
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
+  editOrDelete = () => {
+    if (this.props.edit === true) {
+      return this.renderAddRemoveButtons();
+    } else {
+      return (
+        <React.Fragment>
+          <div
+            className="back-button edit"
+            onClick={() => this.props.openEditDrawer(this.props.round.id)}
+          >
+            Edit
+          </div>
+          <div
+            className="back-button del"
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you wish to delete this item?")
+              ) {
+                api.deleteItem("rounds", this.props.round.id).then(resp => {
+                  if (resp.ok) {
+                    this.props.removeItem(this.props.round.id);
+                  } else {
+                    alert("Error, please try again.");
+                  }
+                });
+              }
+            }}
+          >
+            Delete
+          </div>
+        </React.Fragment>
+      );
+    }
+  };
+
   render() {
     const question_count = this.props.round.child_ids.length;
+
     return (
       <div className="card">
         <div className="card-inner">
@@ -63,36 +138,7 @@ export default class RoundCard extends Component {
           </div>
           <div className="side-back">
             <div className="card-content">
-              <div className="button-container">
-                <div
-                  className="back-button edit"
-                  onClick={() => this.props.openEditDrawer(this.props.round.id)}
-                >
-                  Edit
-                </div>
-                <div
-                  className="back-button del"
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Are you sure you wish to delete this item?"
-                      )
-                    ) {
-                      api
-                        .deleteItem("rounds", this.props.round.id)
-                        .then(resp => {
-                          if (resp.ok) {
-                            this.props.removeItem(this.props.round.id);
-                          } else {
-                            alert("Error, please try again.");
-                          }
-                        });
-                    }
-                  }}
-                >
-                  Delete
-                </div>
-              </div>
+              <div className="button-container">{this.editOrDelete()}</div>
             </div>
           </div>
         </div>
